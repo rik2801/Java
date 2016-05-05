@@ -89,6 +89,12 @@
     #error concat("Wrong rotation axis: <", vstr(3, rot_axis, ", ", 0, 3), ">\n")
   #end
 
+  #if (((a = 90) | (a = -90)) & (dim.u != dim.v))
+    #error concat("It is impossible to rotate a non-square layer on -90 or 90 degrees.\n",
+                  "Cube dimensions: <", vstr(3, <dim_x, dim_y, dim_z>, ", ", 0, 0), ">.\n",
+                  "Rotation axis: <", vstr(3, rot_axis, ", ", 0, 0), ">.\n")
+  #end
+
   #switch (a)
     #case (-90)
       #local new_pos = <pos.v, dim.u - pos.u - 1>;
