@@ -200,3 +200,58 @@
     #end
   }
 #end
+
+
+// Returns a random angle to rotate a layer with respect of this layer
+// dimensions. (non-square layers can't be rotated on 90 degrees)
+//
+// dim - dimensions of the rotated layer (2D vector).
+// rand_stream - pseudo-random stream as it returns by the seed()
+//   function.
+#macro rubik_cube_generate_random_angle(dim, rand_stream)
+  #if (dim.u = dim.v)
+    #local a = rand(rand_stream);
+    #if (a < 1 / 3)
+      -90
+    #elseif (a < 2 / 3)
+      90
+    #else
+      180
+    #end
+  #else
+    180
+  #end
+#end
+
+
+// Returns a random movement.
+//
+// dim - dimensions of the cube (3D vector).
+// rand_stream - pseudo-random stream as it returns by the seed()
+//   function.
+#macro rubik_cube_generate_random_movement(dim, rand_stream)
+  #local axis = rand(rand_stream);
+  #if (axis < 1 / 3)
+    #local movement = <rubik_cube_generate_random_angle(<dim.y, dim.z>, rand_stream), 0, 0, floor((dim.x - 1) * rand(rand_stream))>;
+  #elseif (axis < 2 / 3)
+    #local movement = <0, rubik_cube_generate_random_angle(<dim.x, dim.z>, rand_stream), 0, floor((dim.y - 1) * rand(rand_stream))>;
+  #else
+    #local movement = <0, 0, rubik_cube_generate_random_angle(<dim.x, dim.y>, rand_stream), floor((dim.z - 1) * rand(rand_stream))>;
+  #end
+  movement
+#end
+
+
+// Returns an array of random movements.
+//
+// dim - dimensions of the cube (3D vector).
+// length - number of elements in the generated array.
+// rand_stream - pseudo-random stream as it returns by the seed()
+//   function.
+#macro rubik_cube_generate_random_movements(dim, length, rand_stream)
+  #local movements = array[length];
+  #for (movementIx, 0, length - 1)
+    #local movements[movementIx] = rubik_cube_generate_random_movement(dim, rand_stream);
+  #end
+  movements
+#end

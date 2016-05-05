@@ -41,5 +41,5 @@ cylinder {
 // Cube
 rubik_cube_create_cube(
   3, 3, 3, rubik_cube_colors_classic,
-  array[4] {<90, 0, 0, 1>, <0, 0, 90, 1>, <-90, 0, 0, 1>, <0, 0, -90, 1>}
+  rubik_cube_generate_random_movements(<3, 3, 3>, 2, seed(1))
 )
