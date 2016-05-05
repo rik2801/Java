@@ -65,93 +65,54 @@
 #end
 
 
-// Rotates a layer which is perpendicular to the X axis around it.
+// Calculates position of a piece after the layer rotation.
 //
+// pos_x, pos_y, pos_z - position of the piece to be rotate.
 // dim_x, dim_y, dim_z - dimensions of the cube.
-// pieces - pieces of the cube.
-// layer - the layer to be rotated (position of layer counting from
-//   the left to the right).
-// a - rotation angle.
+// a - rotation angle. Valid values are: -180, -90, 0, 90, 180.
+// rot_axis - an axis, the layer to be rotated around.
 //
-// Returns pieces of the cube with the rotated layer.
-#macro rubik_cube_rotate_by_x(dim_x, dim_y, dim_z, pieces, layer, a)
-  #local new_pieces = pieces;
-
-  #for (pos_y, 0, dim_y - 1)
-    #for (pos_z, 0, dim_z - 1)
-      #local new_pos_y = dim_y - pos_z - 1;
-      #local new_pos_z = pos_y;
-      #local new_pieces[layer + new_pos_y * dim_x + new_pos_z * dim_x * dim_y] =
-      object {
-	pieces[layer + pos_y * dim_x + pos_z * dim_x * dim_y]
-	transform {
-	  rotate a * x
-	}
-      }
-    #end
+// Returns a 3D vector which contains the calculated position.
+#macro rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim_x, dim_y, dim_z, a, rot_axis)
+  // The calculation method doesn't depend on rotation axis. To unify
+  // calculations, a new 2D position vector is introduced.
+  #if (VEq(rot_axis, x))
+    #local pos = <pos_y, pos_z>; // y to z movement is ccw if look along x.
+    #local dim = <dim_y, dim_z>;
+  #elseif (VEq(rot_axis, y))
+    #local pos = <pos_z, pos_x>; // z to x movement is ccw if look along y.
+    #local dim = <dim_z, dim_x>;
+  #elseif (VEq(rot_axis, z))
+    #local pos = <pos_x, pos_y>; // x to y movement is ccw if look along z.
+    #local dim = <dim_x, dim_y>;
+  #else
+    #error concat("Wrong rotation axis: <", vstr(3, rot_axis, ", ", 0, 3), ">\n")
   #end
 
-  new_pieces
-#end
-
-
-// Rotates a layer which is perpendicular to the Y axis around it.
-//
-// dim_x, dim_y, dim_z - dimensions of the cube.
-// pieces - pieces of the cube.
-// layer - the layer to be rotated (position of layer counting from
-//   the left to the right).
-// a - rotation angle.
-//
-// Returns pieces of the cube with the rotated layer.
-#macro rubik_cube_rotate_by_y(dim_x, dim_y, dim_z, pieces, layer, a)
-  #local new_pieces = pieces;
-
-  #for (pos_x, 0, dim_x - 1)
-    #for (pos_z, 0, dim_z - 1)
-      #local new_pos_x = dim_x - pos_z - 1;
-      #local new_pos_z = pos_x;
-      #local new_pieces[new_pos_x + layer * dim_x + new_pos_z * dim_x * dim_y] =
-      object {
-	pieces[pos_x + layer * dim_x + pos_z * dim_x * dim_y]
-	transform {
-	  rotate a * y
-	}
-      }
-    #end
+  #switch (a)
+    #case (-90)
+      #local new_pos = <pos.v, dim.u - pos.u - 1>;
+    #break
+    #case (90)
+      #local new_pos = <dim.v - pos.v - 1, pos.u>;
+    #break
+    #case (-180) #case (180)
+      #local new_pos = <dim.u - pos.u - 1, dim.v - pos.v - 1>;
+    #break
+    #else
+      #error concat("Wrong angle: ", str(a, 0, 3), ".\n")
   #end
 
-  new_pieces
-#end
-
-
-// Rotates a layer which is perpendicular to the Z axis around it.
-//
-// dim_x, dim_y, dim_z - dimensions of the cube.
-// pieces - pieces of the cube.
-// layer - the layer to be rotated (position of layer counting from
-//   the left to the right).
-// a - rotation angle.
-//
-// Returns pieces of the cube with the rotated layer.
-#macro rubik_cube_rotate_by_z(dim_x, dim_y, dim_z, pieces, layer, a)
-  #local new_pieces = pieces;
-
-  #for (pos_x, 0, dim_x - 1)
-    #for (pos_y, 0, dim_y - 1)
-      #local new_pos_x = dim_x - pos_y - 1;
-      #local new_pos_y = pos_x;
-      #local new_pieces[new_pos_x + new_pos_y * dim_x + layer * dim_x * dim_y] =
-      object {
-	pieces[pos_x + pos_y * dim_x + layer * dim_x * dim_y]
-	transform {
-	  rotate a * z
-	}
-      }
-    #end
+  // Return to initial 3D position vector.
+  #if (VEq(rot_axis, x))
+    #local new_pos = <pos_x, new_pos.u, new_pos.v>;
+  #elseif (VEq(rot_axis, y))
+    #local new_pos = <new_pos.v, pos_y, new_pos.u>;
+  #elseif (VEq(rot_axis, z))
+    #local new_pos = <new_pos.u, new_pos.v, pos_z>;
   #end
 
-  new_pieces
+  new_pos
 #end
 
 
@@ -165,38 +126,39 @@
 //
 // Returns pieces of the cube with the rotated layer.
 #macro rubik_cube_move_pieces(dim_x, dim_y, dim_z, pieces, movement)
-  // todo check that movement is valid.
-
   #if (movement.x != 0)
-    #switch (movement.x)
-      #case (-90)
-	#local pieces = rubik_cube_rotate_by_x(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-      #case (180) #case (-180)
-	#local pieces = rubik_cube_rotate_by_x(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-      #case (90)
-	#local pieces = rubik_cube_rotate_by_x(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-    #end
+    #local rot_axis = x;
+    #local a = movement.x;
   #elseif (movement.y != 0)
-    #switch (movement.y)
-      #case (-90)
-	#local pieces = rubik_cube_rotate_by_y(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-      #case (180) #case (-180)
-	#local pieces = rubik_cube_rotate_by_y(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-      #case (90)
-	#local pieces = rubik_cube_rotate_by_y(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-    #end
+    #local rot_axis = y;
+    #local a = movement.y;
   #elseif (movement.z != 0)
-    #switch (movement.z)
-      #case (-90)
-	#local pieces = rubik_cube_rotate_by_z(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-      #case (180) #case (-180)
-	#local pieces = rubik_cube_rotate_by_z(dim_x, dim_y, dim_z, pieces, movement.t, 90);
-      #case (90)
-	#local pieces = rubik_cube_rotate_by_z(dim_x, dim_y, dim_z, pieces, movement.t, 90);
+    #local rot_axis = z;
+    #local a = movement.z;
+  #end
+
+  #local new_pieces = pieces;
+  #for (pos_x, 0, dim_x - 1)
+    #for (pos_y, 0, dim_y - 1)
+      #for (pos_z, 0, dim_z - 1)
+        // Only pieces belonging to the layer movement.t must be rotated.
+        #if (!((VEq(rot_axis, x) & (pos_x != movement.t)) |
+               (VEq(rot_axis, y) & (pos_y != movement.t)) |
+               (VEq(rot_axis, z) & (pos_z != movement.t))))
+          #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim_x, dim_y, dim_z, a, rot_axis);
+          #local new_pieces[new_pos.x + new_pos.y * dim_x + new_pos.z * dim_x * dim_y] =
+            object {
+              pieces[pos_x + pos_y * dim_x + pos_z * dim_x * dim_y]
+              transform {
+                rotate a * rot_axis
+              }
+            };
+        #end
+      #end
     #end
   #end
 
-  pieces
+  new_pieces
 #end
 
 
