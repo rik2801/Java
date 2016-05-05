@@ -33,12 +33,9 @@
 //   are ordered in the same manner as for rubik_cube_create_cube()
 //   macro.
 //
-// Returns an array of the generated cube pieces. The pieces are
-// placed in the array layer by layer from the front layer to the back
-// one. The pieces in a layer are placed line by line from bottom to
-// top. The pieces in a line are placed from left to right.
+// Returns a 3D array of the generated cube pieces.
 #macro rubik_cube_get_all_pieces(dim_x, dim_y, dim_z, colors)
-  #local pieces = array[dim_x * dim_y * dim_z];
+  #local pieces = array[dim_x][dim_y][dim_z];
   #for (pos_x, 0, dim_x - 1)
     #for (pos_y, 0, dim_y - 1)
       #for (pos_z, 0, dim_z - 1)
@@ -50,7 +47,7 @@
 	#if (pos_z != 0)         #local piece_colors[5] = Black; #end
 	#if (pos_z != dim_z - 1) #local piece_colors[2] = Black; #end
 
-	#local pieces[pos_x + pos_y * dim_x + pos_z * dim_x * dim_y] =
+	#local pieces[pos_x][pos_y][pos_z] =
 	object {
 	  rubik_cube_create_piece(piece_colors)
 	  transform {
@@ -152,9 +149,9 @@
                (VEq(rot_axis, y) & (pos_y != movement.t)) |
                (VEq(rot_axis, z) & (pos_z != movement.t))))
           #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim_x, dim_y, dim_z, a, rot_axis);
-          #local new_pieces[new_pos.x + new_pos.y * dim_x + new_pos.z * dim_x * dim_y] =
+          #local new_pieces[new_pos.x][new_pos.y][new_pos.z] =
             object {
-              pieces[pos_x + pos_y * dim_x + pos_z * dim_x * dim_y]
+              pieces[pos_x][pos_y][pos_z]
               transform {
                 rotate a * rot_axis
               }
@@ -195,8 +192,12 @@
   #end
 
   union {
-    #for (item, 0, dim_x * dim_y * dim_z - 1)
-      object { pieces[item] }
+    #for (pos_x, 0, dim_x - 1)
+      #for (pos_y, 0, dim_y - 1)
+        #for (pos_z, 0, dim_z - 1)
+          object { pieces[pos_x][pos_y][pos_z] }
+        #end
+      #end
     #end
   }
 #end
