@@ -28,30 +28,30 @@
 
 // Generates all pieces for a cube.
 //
-// dim_x, dim_y, dim_z - dimensions of the cube.
+// dim - dimensions of the cube (3D vector).
 // colors - array of six colors to be applied for the piece. Colors
 //   are ordered in the same manner as for rubik_cube_create_cube()
 //   macro.
 //
 // Returns a 3D array of the generated cube pieces.
-#macro rubik_cube_get_all_pieces(dim_x, dim_y, dim_z, colors)
-  #local pieces = array[dim_x][dim_y][dim_z];
-  #for (pos_x, 0, dim_x - 1)
-    #for (pos_y, 0, dim_y - 1)
-      #for (pos_z, 0, dim_z - 1)
+#macro rubik_cube_get_all_pieces(dim, colors)
+  #local pieces = array[dim.x][dim.y][dim.z];
+  #for (pos_x, 0, dim.x - 1)
+    #for (pos_y, 0, dim.y - 1)
+      #for (pos_z, 0, dim.z - 1)
 	#local piece_colors = colors;
 	#if (pos_x != 0)         #local piece_colors[3] = Black; #end
-	#if (pos_x != dim_x - 1) #local piece_colors[0] = Black; #end
+	#if (pos_x != dim.x - 1) #local piece_colors[0] = Black; #end
 	#if (pos_y != 0)         #local piece_colors[4] = Black; #end
-	#if (pos_y != dim_y - 1) #local piece_colors[1] = Black; #end
+	#if (pos_y != dim.y - 1) #local piece_colors[1] = Black; #end
 	#if (pos_z != 0)         #local piece_colors[5] = Black; #end
-	#if (pos_z != dim_z - 1) #local piece_colors[2] = Black; #end
+	#if (pos_z != dim.z - 1) #local piece_colors[2] = Black; #end
 
 	#local pieces[pos_x][pos_y][pos_z] =
 	object {
 	  rubik_cube_create_piece(piece_colors)
 	  transform {
-	    translate <pos_x, pos_y, pos_z> - <dim_x / 2, dim_y / 2, dim_z / 2>
+	    translate <pos_x, pos_y, pos_z> - <dim.x / 2, dim.y / 2, dim.z / 2>
 	  }
 	}
       #end
@@ -65,42 +65,42 @@
 // Calculates position of a piece after the layer rotation.
 //
 // pos_x, pos_y, pos_z - position of the piece to be rotate.
-// dim_x, dim_y, dim_z - dimensions of the cube.
+// dim - dimensions of the cube (3D vector).
 // a - rotation angle. Valid values are: -180, -90, 0, 90, 180.
 // rot_axis - an axis, the layer to be rotated around.
 //
 // Returns a 3D vector which contains the calculated position.
-#macro rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim_x, dim_y, dim_z, a, rot_axis)
+#macro rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis)
   // The calculation method doesn't depend on rotation axis. To unify
   // calculations, a new 2D position vector is introduced.
   #if (VEq(rot_axis, x))
     #local pos = <pos_y, pos_z>; // y to z movement is ccw if look along x.
-    #local dim = <dim_y, dim_z>;
+    #local layer_dim = <dim.y, dim.z>;
   #elseif (VEq(rot_axis, y))
     #local pos = <pos_z, pos_x>; // z to x movement is ccw if look along y.
-    #local dim = <dim_z, dim_x>;
+    #local layer_dim = <dim.z, dim.x>;
   #elseif (VEq(rot_axis, z))
     #local pos = <pos_x, pos_y>; // x to y movement is ccw if look along z.
-    #local dim = <dim_x, dim_y>;
+    #local layer_dim = <dim.x, dim.y>;
   #else
     #error concat("Wrong rotation axis: <", vstr(3, rot_axis, ", ", 0, 3), ">\n")
   #end
 
-  #if (((a = 90) | (a = -90)) & (dim.u != dim.v))
+  #if (((a = 90) | (a = -90)) & (layer_dim.u != layer_dim.v))
     #error concat("It is impossible to rotate a non-square layer on -90 or 90 degrees.\n",
-                  "Cube dimensions: <", vstr(3, <dim_x, dim_y, dim_z>, ", ", 0, 0), ">.\n",
+                  "Layer dimensions: <", vstr(2, layer_dim, ", ", 0, 0), ">.\n",
                   "Rotation axis: <", vstr(3, rot_axis, ", ", 0, 0), ">.\n")
   #end
 
   #switch (a)
     #case (-90)
-      #local new_pos = <pos.v, dim.u - pos.u - 1>;
+      #local new_pos = <pos.v, layer_dim.u - pos.u - 1>;
     #break
     #case (90)
-      #local new_pos = <dim.v - pos.v - 1, pos.u>;
+      #local new_pos = <layer_dim.v - pos.v - 1, pos.u>;
     #break
     #case (-180) #case (180)
-      #local new_pos = <dim.u - pos.u - 1, dim.v - pos.v - 1>;
+      #local new_pos = <layer_dim.u - pos.u - 1, layer_dim.v - pos.v - 1>;
     #break
     #else
       #error concat("Wrong angle: ", str(a, 0, 3), ".\n")
@@ -148,7 +148,7 @@
         #if (!((VEq(rot_axis, x) & (pos_x != movement.t)) |
                (VEq(rot_axis, y) & (pos_y != movement.t)) |
                (VEq(rot_axis, z) & (pos_z != movement.t))))
-          #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim.x, dim.y, dim.z, a, rot_axis);
+          #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis);
           #local new_pieces[new_pos.x][new_pos.y][new_pos.z] =
             object {
               pieces[pos_x][pos_y][pos_z]
@@ -167,7 +167,7 @@
 
 // Generates a cube with desired dimensions, colors and rotated layers.
 //
-// dim_x, dim_y, dim_z - dimensions of the cube.
+// dim - dimensions of the cube (3D vector).
 // colors - array of six colors to be applied for the cube. Colors are
 //   ordered in the following way: right face (0); top face (1); back
 //   face (2); left face (3); bottom face (4); front face (5).
@@ -184,17 +184,17 @@
 // Returns the generated cube in form of an object with center in
 // origin. Each piece has a form of a cube of size of 1 unit, i.e. a
 // cube 3x3x3 will have size of 3 units.
-#macro rubik_cube_create_cube(dim_x, dim_y, dim_z, colors, movements)
-  #local pieces = rubik_cube_get_all_pieces(dim_x, dim_y, dim_z, colors)
+#macro rubik_cube_create_cube(dim, colors, movements)
+  #local pieces = rubik_cube_get_all_pieces(dim, colors)
 
   #for (movementIx, 0, dimension_size(movements, 1) - 1)
     #local pieces = rubik_cube_move_pieces(pieces, movements[movementIx]);
   #end
 
   union {
-    #for (pos_x, 0, dim_x - 1)
-      #for (pos_y, 0, dim_y - 1)
-        #for (pos_z, 0, dim_z - 1)
+    #for (pos_x, 0, dim.x - 1)
+      #for (pos_y, 0, dim.y - 1)
+        #for (pos_z, 0, dim.z - 1)
           object { pieces[pos_x][pos_y][pos_z] }
         #end
       #end
