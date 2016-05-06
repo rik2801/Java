@@ -143,6 +143,9 @@
 //
 // Returns cube with the rotated layer.
 #macro rubik_cube_rotate_layer(rcube, movement, is_latest)
+  #local rot_axis = <0, 0, 0>;
+  #local a = 0;
+
   #if (movement.x != 0)
     #local rot_axis = x;
     #local a = movement.x;
@@ -264,6 +267,40 @@
 #macro rubik_cube_mix(rcube, number_of_rotations, rand_stream)
   #local dim = <dimension_size(rcube, 1), dimension_size(rcube, 2), dimension_size(rcube, 3)>;
   rubik_cube_rotate_layers(rcube, rubik_cube_generate_random_movements(dim, number_of_rotations, rand_stream))
+#end
+
+
+// Animates a cube.
+//
+// rcube - cube to be animated. (3D array)
+// movements - array of movements to be animated. Description of a
+//   movement can be found in rubik_cube_rotate_layer() macro.
+// from_clock - time when animation must be started.
+// to_clock - time when animation must be stopped.
+#macro rubik_cube_animate(rcube, movements, from_clock, to_clock)
+  #if (to_clock < from_clock)
+    #error concat("to_clock(", str(to_clock, 0, 5), ") can't be bigger then from_clock(", str(from_clock), ").")
+  #end
+  #if (clock <= from_clock)
+    rcube
+  #elseif (clock < to_clock)
+    #local clocks_per_movement = (to_clock - from_clock) / dimension_size(movements, 1);
+    #local current_movement = floor((clock - from_clock) / clocks_per_movement);
+
+    #local showed_movements = array[current_movement + 1];
+    #for (movementIx, 0, current_movement)
+      #local showed_movements[movementIx] = movements[movementIx];
+    #end
+
+    #local rot_phase = mod((clock - from_clock), clocks_per_movement) / clocks_per_movement;
+    #local rotation = <showed_movements[current_movement].x, showed_movements[current_movement].y, showed_movements[current_movement].z>;
+    #local rotation = rotation * rot_phase;
+    #local showed_movements[current_movement] = <rotation.x, rotation.y, rotation.z, showed_movements[current_movement].t>;
+
+    rubik_cube_rotate_layers(rcube, showed_movements)
+  #else
+    rubik_cube_rotate_layers(rcube, movements)
+  #end
 #end
 
 
