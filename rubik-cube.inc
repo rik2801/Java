@@ -239,6 +239,18 @@
 #end
 
 
+// Returns a mixed cube.
+//
+// rcube - cube to be mixed. (3D array)
+// number_of_rotations - number of random layers rotations.
+// rand_stream - pseudo-random stream as it returns by the seed()
+//   function.
+#macro rubik_cube_mix(rcube, number_of_rotations, rand_stream)
+  #local dim = <dimension_size(rcube, 1), dimension_size(rcube, 2), dimension_size(rcube, 3)>;
+  rubik_cube_rotate_layers(rcube, rubik_cube_generate_random_movements(dim, number_of_rotations, rand_stream))
+#end
+
+
 // Returns the cube transformed to an object from its representation
 // as a 3D array.
 //
