@@ -122,13 +122,12 @@
 // Rotate a layer of the provided cube according to the provided
 // movement vector.
 //
-// dim_x, dim_y, dim_z - dimensions of the cube.
 // pieces - pieces of the cube.
 // movement - movement as it described in rubik_cube_create_cube()
 //   macro.
 //
 // Returns pieces of the cube with the rotated layer.
-#macro rubik_cube_move_pieces(dim_x, dim_y, dim_z, pieces, movement)
+#macro rubik_cube_move_pieces(pieces, movement)
   #if (movement.x != 0)
     #local rot_axis = x;
     #local a = movement.x;
@@ -141,14 +140,15 @@
   #end
 
   #local new_pieces = pieces;
-  #for (pos_x, 0, dim_x - 1)
-    #for (pos_y, 0, dim_y - 1)
-      #for (pos_z, 0, dim_z - 1)
+  #local dim = <dimension_size(pieces, 1), dimension_size(pieces, 2), dimension_size(pieces, 3)>;
+  #for (pos_x, 0, dim.x - 1)
+    #for (pos_y, 0, dim.y - 1)
+      #for (pos_z, 0, dim.z - 1)
         // Only pieces belonging to the layer movement.t must be rotated.
         #if (!((VEq(rot_axis, x) & (pos_x != movement.t)) |
                (VEq(rot_axis, y) & (pos_y != movement.t)) |
                (VEq(rot_axis, z) & (pos_z != movement.t))))
-          #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim_x, dim_y, dim_z, a, rot_axis);
+          #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim.x, dim.y, dim.z, a, rot_axis);
           #local new_pieces[new_pos.x][new_pos.y][new_pos.z] =
             object {
               pieces[pos_x][pos_y][pos_z]
@@ -188,7 +188,7 @@
   #local pieces = rubik_cube_get_all_pieces(dim_x, dim_y, dim_z, colors)
 
   #for (movementIx, 0, dimension_size(movements, 1) - 1)
-    #local pieces = rubik_cube_move_pieces(dim_x, dim_y, dim_z, pieces, movements[movementIx]);
+    #local pieces = rubik_cube_move_pieces(pieces, movements[movementIx]);
   #end
 
   union {
