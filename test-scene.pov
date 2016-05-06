@@ -2,7 +2,7 @@
 
 
 camera {
-  location <2, 2, -7>
+  location <4, 4, -8>
   look_at  <0, 0,  0>
 }
 
