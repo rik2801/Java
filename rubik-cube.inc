@@ -26,16 +26,17 @@
 #end
 
 
-// Generates all pieces for a cube.
+// Returns a new cube (3D array of the generated cube pieces).
+// Pieces of the cube are smaller cubes of 1 unit size, so a cube
+// 3x3x3 will have size of 3 units.
 //
 // dim - dimensions of the cube (3D vector).
-// colors - array of six colors to be applied for the piece. Colors
-//   are ordered in the same manner as for rubik_cube_create_cube()
-//   macro.
-//
-// Returns a 3D array of the generated cube pieces.
-#macro rubik_cube_get_all_pieces(dim, colors)
-  #local pieces = array[dim.x][dim.y][dim.z];
+// colors - array of six colors to be applied for the cube. Colors are
+//   ordered in the following way: right face (0); top face (1); back
+//   face (2); left face (3); bottom face (4); front face (5).
+//   Note. Interior faces are colored in black.
+#macro rubik_cube_create_cube(dim, colors)
+  #local rcube = array[dim.x][dim.y][dim.z];
   #for (pos_x, 0, dim.x - 1)
     #for (pos_y, 0, dim.y - 1)
       #for (pos_z, 0, dim.z - 1)
@@ -47,7 +48,7 @@
 	#if (pos_z != 0)         #local piece_colors[5] = Black; #end
 	#if (pos_z != dim.z - 1) #local piece_colors[2] = Black; #end
 
-	#local pieces[pos_x][pos_y][pos_z] =
+	#local rcube[pos_x][pos_y][pos_z] =
 	object {
 	  rubik_cube_create_piece(piece_colors)
 	  transform {
@@ -58,7 +59,7 @@
     #end
   #end
 
-  pieces
+  rcube
 #end
 
 
@@ -119,15 +120,20 @@
 #end
 
 
-// Rotate a layer of the provided cube according to the provided
-// movement vector.
+// Rotates a layer of the cube according to the movement vector.
 //
-// pieces - pieces of the cube.
-// movement - movement as it described in rubik_cube_create_cube()
-//   macro.
+// rcube - cube, a layer to be rotated of. (3D array)
+// movement - array of movements to be applied to the cube. Each
+//   movement is a 4D vector. First three components are rotation
+//   angles for layers perpendicular to corresponding axis, the third
+//   component indicates the layer to be rotated position (from left
+//   to right, from bottom to top or from front to back).  Valid
+//   values for angles are: -180, -90, 0, 90, 180.
+//   Attention! It is invalid to use more than one non-zero angle in
+//   the movement vector.
 //
-// Returns pieces of the cube with the rotated layer.
-#macro rubik_cube_move_pieces(pieces, movement)
+// Returns cube with the rotated layer.
+#macro rubik_cube_rotate_layer(rcube, movement)
   #if (movement.x != 0)
     #local rot_axis = x;
     #local a = movement.x;
@@ -139,8 +145,8 @@
     #local a = movement.z;
   #end
 
-  #local new_pieces = pieces;
-  #local dim = <dimension_size(pieces, 1), dimension_size(pieces, 2), dimension_size(pieces, 3)>;
+  #local new_cube = rcube;
+  #local dim = <dimension_size(rcube, 1), dimension_size(rcube, 2), dimension_size(rcube, 3)>;
   #for (pos_x, 0, dim.x - 1)
     #for (pos_y, 0, dim.y - 1)
       #for (pos_z, 0, dim.z - 1)
@@ -149,9 +155,9 @@
                (VEq(rot_axis, y) & (pos_y != movement.t)) |
                (VEq(rot_axis, z) & (pos_z != movement.t))))
           #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis);
-          #local new_pieces[new_pos.x][new_pos.y][new_pos.z] =
+          #local new_cube[new_pos.x][new_pos.y][new_pos.z] =
             object {
-              pieces[pos_x][pos_y][pos_z]
+	      rcube[pos_x][pos_y][pos_z]
               transform {
                 rotate a * rot_axis
               }
@@ -161,45 +167,20 @@
     #end
   #end
 
-  new_pieces
+  new_cube
 #end
 
 
-// Generates a cube with desired dimensions, colors and rotated layers.
+// Returns a cube with rotated layers.
 //
-// dim - dimensions of the cube (3D vector).
-// colors - array of six colors to be applied for the cube. Colors are
-//   ordered in the following way: right face (0); top face (1); back
-//   face (2); left face (3); bottom face (4); front face (5).
-//   Note. Interior faces are colored in black.
-// movement - array of movements to be applied to the generated
-//   cube. Each movement is a 4D vector. First three components are
-//   rotation angles for layers perpendicular to corresponding axis,
-//   the third component indicates the layer to be rotated position
-//   (from left to right, from bottom to top or from front to back).
-//   Valid values for angles are: -180, -90, 0, 90, 180.
-//   Attention! It is invalid to use more than one non-zero angle in
-//   the movement vector.
-//
-// Returns the generated cube in form of an object with center in
-// origin. Each piece has a form of a cube of size of 1 unit, i.e. a
-// cube 3x3x3 will have size of 3 units.
-#macro rubik_cube_create_cube(dim, colors, movements)
-  #local pieces = rubik_cube_get_all_pieces(dim, colors)
-
+// rcube - cube, layers to be rotated of. (3D array)
+// movements - array of movements. Description of a movement can be
+//   found in rubik_cube_rotate_layer() macro.
+#macro rubik_cube_rotate_layers(rcube, movements)
   #for (movementIx, 0, dimension_size(movements, 1) - 1)
-    #local pieces = rubik_cube_move_pieces(pieces, movements[movementIx]);
+    #local rcube = rubik_cube_rotate_layer(rcube, movements[movementIx]);
   #end
-
-  union {
-    #for (pos_x, 0, dim.x - 1)
-      #for (pos_y, 0, dim.y - 1)
-        #for (pos_z, 0, dim.z - 1)
-          object { pieces[pos_x][pos_y][pos_z] }
-        #end
-      #end
-    #end
-  }
+  rcube
 #end
 
 
@@ -255,4 +236,22 @@
     #local movements[movementIx] = rubik_cube_generate_random_movement(dim, rand_stream);
   #end
   movements
+#end
+
+
+// Returns the cube transformed to an object from its representation
+// as a 3D array.
+//
+// rcube - cube to be transformed. (3D array)
+#macro rubik_cube_to_object(rcube)
+  #local dim = <dimension_size(rcube, 1), dimension_size(rcube, 2), dimension_size(rcube, 3)>;
+  union {
+    #for (pos_x, 0, dim.x - 1)
+      #for (pos_y, 0, dim.y - 1)
+        #for (pos_z, 0, dim.z - 1)
+          object { rcube[pos_x][pos_y][pos_z] }
+        #end
+      #end
+    #end
+  }
 #end
