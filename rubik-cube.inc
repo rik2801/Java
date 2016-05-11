@@ -127,13 +127,18 @@
 //   movement is a 4D vector. First three components are rotation
 //   angles for layers perpendicular to corresponding axis, the third
 //   component indicates the layer to be rotated position (from left
-//   to right, from bottom to top or from front to back).  Valid
-//   values for angles are: -180, -90, 0, 90, 180.
+//   to right, from bottom to top or from front to back).
 //   Attention! It is invalid to use more than one non-zero angle in
 //   the movement vector.
+// is_latest - shows if the movement is the latest one and no more
+//   movements will be applied to the cube. There is no restrictions
+//   on the rotation angle of the latest movement. Whereas valid
+//   values for a non-latest movement are:
+//     -180, -90, 90, 180 - for a square layer, and
+//     -180, 180          - for a non-square layer.
 //
 // Returns cube with the rotated layer.
-#macro rubik_cube_rotate_layer(rcube, movement)
+#macro rubik_cube_rotate_layer(rcube, movement, is_latest)
   #if (movement.x != 0)
     #local rot_axis = x;
     #local a = movement.x;
@@ -154,10 +159,16 @@
         #if (!((VEq(rot_axis, x) & (pos_x != movement.t)) |
                (VEq(rot_axis, y) & (pos_y != movement.t)) |
                (VEq(rot_axis, z) & (pos_z != movement.t))))
-          #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis);
+
+          #if (is_latest = 0)
+            #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis);
+          #else
+            #local new_pos = <pos_x, pos_y, pos_z>;
+          #end
+
           #local new_cube[new_pos.x][new_pos.y][new_pos.z] =
             object {
-	      rcube[pos_x][pos_y][pos_z]
+              rcube[pos_x][pos_y][pos_z]
               transform {
                 rotate a * rot_axis
               }
@@ -177,8 +188,9 @@
 // movements - array of movements. Description of a movement can be
 //   found in rubik_cube_rotate_layer() macro.
 #macro rubik_cube_rotate_layers(rcube, movements)
-  #for (movementIx, 0, dimension_size(movements, 1) - 1)
-    #local rcube = rubik_cube_rotate_layer(rcube, movements[movementIx]);
+  #local movementsLen = dimension_size(movements, 1);
+  #for (movementIx, 0, movementsLen - 1)
+    #local rcube = rubik_cube_rotate_layer(rcube, movements[movementIx], (movementIx = movementsLen - 1 ? 1 : 0));
   #end
   rcube
 #end
