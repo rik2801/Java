@@ -67,8 +67,12 @@
 //
 // pos_x, pos_y, pos_z - position of the piece to be rotate.
 // dim - dimensions of the cube (3D vector).
-// a - rotation angle. Valid values are: -180, -90, 0, 90, 180.
+// a - rotation angle.
+//   Valid values are:
+//     -180, -90, 90, 180 - for a square layer, and
+//     -180, 180          - for a non-square layer.
 // rot_axis - an axis, the layer to be rotated around.
+//   Valid rotation axis are: x, y, z.
 //
 // Returns a 3D vector which contains the calculated position.
 #macro rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis)
