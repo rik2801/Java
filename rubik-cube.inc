@@ -210,17 +210,23 @@
 // rand_stream - pseudo-random stream as it returns by the seed()
 //   function.
 #macro rubik_cube_generate_random_angle(dim, rand_stream)
+  #local a = rand(rand_stream);
   #if (dim.u = dim.v)
-    #local a = rand(rand_stream);
-    #if (a < 1 / 3)
+    #if (a < 0.25)
+      -180
+    #elseif (a < 0.5)
       -90
-    #elseif (a < 2 / 3)
+    #elseif (a < 0.75)
       90
     #else
       180
     #end
   #else
-    180
+    #if (a < 0.5)
+      -180
+    #else
+      180
+    #end
   #end
 #end
 
