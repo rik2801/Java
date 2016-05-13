@@ -239,11 +239,11 @@
 #macro rubik_cube_generate_random_movement(dim, rand_stream)
   #local axis = rand(rand_stream);
   #if (axis < 1 / 3)
-    #local movement = <rubik_cube_generate_random_angle(<dim.y, dim.z>, rand_stream), 0, 0, floor((dim.x - 1) * rand(rand_stream))>;
+    #local movement = <rubik_cube_generate_random_angle(<dim.y, dim.z>, rand_stream), 0, 0, floor((dim.x - 1) * rand(rand_stream) + 0.5)>;
   #elseif (axis < 2 / 3)
-    #local movement = <0, rubik_cube_generate_random_angle(<dim.x, dim.z>, rand_stream), 0, floor((dim.y - 1) * rand(rand_stream))>;
+    #local movement = <0, rubik_cube_generate_random_angle(<dim.x, dim.z>, rand_stream), 0, floor((dim.y - 1) * rand(rand_stream) + 0.5)>;
   #else
-    #local movement = <0, 0, rubik_cube_generate_random_angle(<dim.x, dim.y>, rand_stream), floor((dim.z - 1) * rand(rand_stream))>;
+    #local movement = <0, 0, rubik_cube_generate_random_angle(<dim.x, dim.y>, rand_stream), floor((dim.z - 1) * rand(rand_stream) + 0.5)>;
   #end
   movement
 #end
