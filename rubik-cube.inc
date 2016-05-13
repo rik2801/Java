@@ -249,6 +249,27 @@
 #end
 
 
+// Checks if two movements rotates the same layer.
+//
+// movement1, movement2 - examined movements.
+//
+// Returns:
+//   0 - different layers are rotated;
+//   1 - same layer is rotated.
+#macro rubik_cube_is_same_layer_rotated(movement1, movement2)
+  #local result = 0;
+  #if (movement1.t = movement2.t)
+    #local axis1 = <movement1.x, movement1.y, movement1.z>;
+    #local axis2 = <movement2.x, movement2.y, movement2.z>;
+    #local angle_between_axes = VAngleD(axis1, axis2);
+    #if ((angle_between_axes = 0) | (angle_between_axes = 180))
+      #local result = 1;
+    #end
+  #end
+  result
+#end
+
+
 // Returns an array of random movements.
 //
 // dim - dimensions of the cube (3D vector).
@@ -259,6 +280,13 @@
   #local movements = array[length];
   #for (movementIx, 0, length - 1)
     #local movements[movementIx] = rubik_cube_generate_random_movement(dim, rand_stream);
+
+    // Forbid two rotations of the same layer in a row.
+    #if (movementIx > 0)
+      #if (rubik_cube_is_same_layer_rotated(movements[movementIx - 1], movements[movementIx]))
+        #local movementIx = movementIx - 1;
+      #end
+    #end
   #end
   movements
 #end
