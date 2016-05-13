@@ -270,6 +270,85 @@
 #end
 
 
+// Checks if a movement has a rotation on 180 degrees.
+//
+// movement - movement to be examined.
+//
+// Returns:
+//   0 - movement has no 180 degrees rotation.
+//   1 - movement has a  180 degrees rotation.
+#macro rubik_cube_is_movement_180(movement)
+  #local result = 0;
+  #if (((movement.x = -180) | (movement.x = 180)) |
+       ((movement.y = -180) | (movement.y = 180)) |
+       ((movement.z = -180) | (movement.z = 180)))
+    #local result = 1;
+  #end
+  result
+#end
+
+
+// Returns number of 90 degrees rotation frames within provided
+// movements.
+//
+// To animate rotations with the same speed, each 180 degrees
+// rotation is treated as two 90 degrees rotations.
+//
+// movements - array of movements to be examined.
+#macro rubik_cube_get_number_of_90_frames(movements)
+  #local result = dimension_size(movements, 1);
+  #for (movementIx, 0, dimension_size(movements, 1) - 1)
+    #if (rubik_cube_is_movement_180(movements[movementIx]))
+      #local result = result + 1;
+    #end
+  #end
+  result
+#end
+
+
+// Returns the index of a movement which corresponds to the provided
+// 90 degrees rotation frame.
+//
+// movements - array of movements.
+// frame - a 90 degrees rotation frame.
+// pos_in_180_frame [out] - position of the provided 90 degrees
+// rotation frame in a 180 degrees rotation frame:
+//     0 - not a 180 frame;
+//     1 - first half;
+//     2 - second half.
+#macro rubik_cube_find_movement(movements, frame, pos_in_180_frame)
+  #local number_of_180_frames = 0;
+  #declare pos_in_180_frame = 0;
+
+  #for (movementIx, 0, frame)
+    #if (rubik_cube_is_movement_180(movements[movementIx - number_of_180_frames]))
+      // Modulo prevents increasing position to a value greater than 2
+      // if there are several movements with 180 degrees rotations in
+      // a row.
+      #declare pos_in_180_frame = mod(pos_in_180_frame, 2) + 1;
+
+      // A movement with 180 degrees rotation must be calculated only
+      // once.
+      #if (pos_in_180_frame = 1)
+        #local number_of_180_frames = number_of_180_frames + 1;
+      #end
+    #else
+      #declare pos_in_180_frame = 0;
+    #end
+  #end
+
+  // If a 180 degrees rotation frame is just started then it should
+  // not be considered in further calculations as there is no
+  // difference between it and a 90 degrees rotation frame.
+  #if (pos_in_180_frame = 1)
+    #local number_of_180_frames = number_of_180_frames - 1;
+  #end
+
+  #local result = frame - number_of_180_frames;
+  result
+#end
+
+
 // Animates a cube.
 //
 // rcube - cube to be animated. (3D array)
@@ -284,15 +363,31 @@
   #if (clock <= from_clock)
     rcube
   #elseif (clock < to_clock)
-    #local clocks_per_movement = (to_clock - from_clock) / dimension_size(movements, 1);
-    #local current_movement = floor((clock - from_clock) / clocks_per_movement);
+    #local clocks_per_90_movement = (to_clock - from_clock) / rubik_cube_get_number_of_90_frames(movements);
+    #local current_90_frame = floor((clock - from_clock) / clocks_per_90_movement);
+    #local pos_in_180_frame = 0;
+    #local current_movement = rubik_cube_find_movement(movements, current_90_frame, pos_in_180_frame);
 
     #local showed_movements = array[current_movement + 1];
     #for (movementIx, 0, current_movement)
       #local showed_movements[movementIx] = movements[movementIx];
     #end
 
-    #local rot_phase = mod((clock - from_clock), clocks_per_movement) / clocks_per_movement;
+    #local rot_phase = mod((clock - from_clock), clocks_per_90_movement) / clocks_per_90_movement;
+    // A 180 degrees rotation frame is twice as long as a 90 degrees
+    // rotation frame. For this reason, the rotation phase is twice
+    // smaller for such frames.
+    #switch (pos_in_180_frame)
+      #case (1)
+        #local rot_phase = rot_phase / 2;
+      #break
+      #case (2)
+        // 1/2 is added to extend the phase to the second half of the
+        // frame.
+        #local rot_phase = rot_phase / 2 + 0.5;
+      #break
+    #end
+
     #local rotation = <showed_movements[current_movement].x, showed_movements[current_movement].y, showed_movements[current_movement].z>;
     #local rotation = rotation * rot_phase;
     #local showed_movements[current_movement] = <rotation.x, rotation.y, rotation.z, showed_movements[current_movement].t>;
