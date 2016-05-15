@@ -1,38 +1,26 @@
+#version 3.7;
+
 #include "colors.inc"
 
 
+light_source {
+  <-1000, 1000, -1000>
+  color White
+}
+
+
+light_source {
+  <1000, 1000, -1000>
+  color White
+}
+
+
+sky_sphere {
+  pigment { color White }
+}
+
+
 camera {
-  location <4, 4, -8>
+  location <3, 3, -4>
   look_at  <0, 0,  0>
-}
-
-
-light_source {
-  <2, 4, -3>
-  color White
-}
-
-light_source {
-  <4, 2, -3>
-  color White
-}
-
-
-// Axis
-cylinder {
-  <0, 0, 0>, <5, 0, 0>, 0.01
-  open
-  pigment { Red }
-}
-
-cylinder {
-  <0, 0, 0>, <0, 5, 0>, 0.01
-  open
-  pigment { Green }
-}
-
-cylinder {
-  <0, 0, 0>, <0, 0, 5>, 0.01
-  open
-  pigment { Blue }
 }
