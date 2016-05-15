@@ -4,7 +4,7 @@ Demo
 Static Cubes
 ------------
 
-### Simple Cube (simple-cube.pov)
+### Simple Cube ([simple-cube.pov](simple-cube.pov))
 
 ![](simple-cube.png)
 
@@ -26,7 +26,7 @@ A solved classic 3x3x3 cube can be created in just two steps:
 Animations
 ----------
 
-### Cube Mixing (animation-mix.ini/pov)
+### Cube Mixing ([animation-mix.ini](animation-mix.ini)/[pov](animation-mix.pov))
 
 ![](animation-mix.gif)
 
