@@ -1,10 +1,32 @@
 Demo
 ====
 
-Animation
----------
+Static Cubes
+------------
 
-### Cube Mixing (animation-mix.pov/ini)
+### Simple Cube (simple-cube.pov)
+
+![](simple-cube.png)
+
+A solved classic 3x3x3 cube can be created in just two steps:
+
+1. Create a 3x3x3 cube with the classic color scheme:
+   ```
+   rubik_cube_create_cube(<3, 3, 3>, rubik_cube_colors_classic)
+   ```
+
+2. The macro above returns created cube in a form of a 3D array. Such
+   form is not suitable for rendering. The array is converted into an
+   object by means of the following macro:
+   ```
+   rubik_cube_to_object(...)
+   ```
+
+
+Animations
+----------
+
+### Cube Mixing (animation-mix.ini/pov)
 
 ![](animation-mix.gif)
 
