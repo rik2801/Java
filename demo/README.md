@@ -23,6 +23,23 @@ A solved classic 3x3x3 cube can be created in just two steps:
    ```
 
 
+### Colors Customization ([custom-colors.pov](custom-colors.pov))
+
+![](custom-colors.png)
+
+Cube colors can be customized by passing an array of colors into the
+`rubik_cube_create_cube()` macro:
+```
+rubik_cube_create_cube(
+  ...,
+  array[6] { Wheat, Maroon, SlateBlue, MidnightBlue, Tan, Goldenrod }
+)
+```
+
+Colors order is the same as used in built-in `cubic` pattern: right,
+top, back, left, bottom and front.
+
+
 Animations
 ----------
 
