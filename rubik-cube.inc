@@ -63,30 +63,49 @@
 #end
 
 
+// Returns dimensions of the layers perpendicular to the provided
+// axis.
+//
+// dim - cube dimensions.
+// axis - dimensions of the layers perpendicular to this axis are
+//   returned.
+#macro rubik_cube_get_layer_dimensions(dim, axis)
+  #if (VEq(rot_axis, x))
+    #local layer_dim = <dim.y, dim.z>;
+  #elseif (VEq(rot_axis, y))
+    #local layer_dim = <dim.z, dim.x>;
+  #elseif (VEq(rot_axis, z))
+    #local layer_dim = <dim.x, dim.y>;
+  #else
+    #error concat("Wrong rotation axis: <", vstr(3, rot_axis, ", ", 0, 3), ">\n")
+  #end
+  layer_dim
+#end
+
+
 // Calculates position of a piece after the layer rotation.
 //
 // pos_x, pos_y, pos_z - position of the piece to be rotate.
 // dim - dimensions of the cube (3D vector).
 // a - rotation angle.
 //   Valid values are:
-//     -180, -90, 90, 180 - for a square layer, and
-//     -180, 180          - for a non-square layer.
+//     -180, -90, 0, 90, 180 - for a square layer, and
+//     -180, 0, 180          - for a non-square layer.
 // rot_axis - an axis, the layer to be rotated around.
 //   Valid rotation axis are: x, y, z.
 //
 // Returns a 3D vector which contains the calculated position.
 #macro rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis)
+  #local layer_dim = rubik_cube_get_layer_dimensions(dim, rot_axis);
+
   // The calculation method doesn't depend on rotation axis. To unify
   // calculations, a new 2D position vector is introduced.
   #if (VEq(rot_axis, x))
     #local pos = <pos_y, pos_z>; // y to z movement is ccw if look along x.
-    #local layer_dim = <dim.y, dim.z>;
   #elseif (VEq(rot_axis, y))
     #local pos = <pos_z, pos_x>; // z to x movement is ccw if look along y.
-    #local layer_dim = <dim.z, dim.x>;
   #elseif (VEq(rot_axis, z))
     #local pos = <pos_x, pos_y>; // x to y movement is ccw if look along z.
-    #local layer_dim = <dim.x, dim.y>;
   #else
     #error concat("Wrong rotation axis: <", vstr(3, rot_axis, ", ", 0, 3), ">\n")
   #end
@@ -98,6 +117,8 @@
   #end
 
   #switch (a)
+    #case (0)
+      #local new_pos = pos;
     #case (-90)
       #local new_pos = <pos.v, layer_dim.u - pos.u - 1>;
     #break
@@ -124,22 +145,63 @@
 #end
 
 
+// Checks if a rotation is a valid one:
+//   -180, -90, 0, 90, 180 - for a square layer, and
+//   -180, 0, 180          - for a non square layer.
+//
+// dim - dimensions of the cube. (3D vector)
+// rot_axis - an axis, the layer to be rotated around.
+//   Valid rotation axis are: x, y, z.
+// a - rotation angle to be examined.
+//
+// Returns:
+//   0 - rotation is invalid.
+//   1 - rotation is valid.
+#macro rubik_cube_is_rotation_valid(dim, rot_axis, a)
+  #local result = 0;
+
+  // If angle is zero then rotation axis could be equal zero too. It
+  // is impossimle to determine layer dimensions for such axis.
+  #if (a != 0)
+    #local layer_dim = rubik_cube_get_layer_dimensions(dim, rot_axis);
+
+    #if (layer_dim.u = layer_dim.v)
+      #local min_angle = 90;
+    #else
+      #local min_angle = 180;
+    #end
+
+    #if (mod(a, min_angle) = 0)
+      #local result = 1;
+    #end
+  #else
+    #local result = 0;
+  #end
+
+  result
+#end
+
+
 // Rotates a layer of the cube according to the movement vector.
 //
 // rcube - cube, a layer to be rotated of. (3D array)
-// movement - array of movements to be applied to the cube. Each
-//   movement is a 4D vector. First three components are rotation
-//   angles for layers perpendicular to corresponding axis, the third
-//   component indicates the layer to be rotated position (from left
-//   to right, from bottom to top or from front to back).
+// movement - a movement to be applied to the cube. Each movement is a
+//   4D vector. First three components are rotation angles for layers
+//   perpendicular to corresponding axis, the third component
+//   indicates the layer to be rotated position (from left to right,
+//   from bottom to top or from front to back).
 //   Attention! It is invalid to use more than one non-zero angle in
 //   the movement vector.
 // is_latest - shows if the movement is the latest one and no more
 //   movements will be applied to the cube. There is no restrictions
 //   on the rotation angle of the latest movement. Whereas valid
 //   values for a non-latest movement are:
-//     -180, -90, 90, 180 - for a square layer, and
-//     -180, 180          - for a non-square layer.
+//     -180, -90, 0, 90, 180 - for a square layer, and
+//     -180, 0, 180          - for a non-square layer.
+//
+// Warning! If is_latest was set to true and a restricted rotation
+// angle was used in the previsous macro execution, another execution
+// will break the cube.
 //
 // Returns cube with the rotated layer.
 #macro rubik_cube_rotate_layer(rcube, movement, is_latest)
@@ -167,7 +229,8 @@
                (VEq(rot_axis, y) & (pos_y != movement.t)) |
                (VEq(rot_axis, z) & (pos_z != movement.t))))
 
-          #if (is_latest = 0)
+          #if ((is_latest = 0) |
+               rubik_cube_is_rotation_valid(dim, rot_axis, a))
             #local new_pos = rubik_cube_calc_rotated_position(pos_x, pos_y, pos_z, dim, a, rot_axis);
           #else
             #local new_pos = <pos_x, pos_y, pos_z>;
