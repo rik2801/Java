@@ -23,6 +23,17 @@ A solved classic 3x3x3 cube can be created in just two steps:
    ```
 
 
+### Cuboid ([cuboid.pov](cuboid.pov))
+
+![](cuboid.png)
+
+Cuboids of any dimensions (for example, Rubik's Tower) can be created
+by altering dimensions:
+```
+  rubik_cube_create_cube(<2, 4, 2>, ...)
+```
+
+
 ### Colors Customization ([custom-colors.pov](custom-colors.pov))
 
 ![](custom-colors.png)
