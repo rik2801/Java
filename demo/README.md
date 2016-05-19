@@ -76,3 +76,14 @@ Animations
    ```
    rubik_cube_to_object(...)
    ```
+
+
+### Movements Reflection ([movements-reflection.ini](movements-reflection.ini)/[pov](movements-reflection.pov))
+
+To return a cube back into its condition after layers rotations, those
+rotations can be 'reflected':
+```
+rubik_cube_reflect_movements(fwd_movements)
+```
+
+![](movements-reflection.gif)

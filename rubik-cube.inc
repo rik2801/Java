@@ -367,6 +367,45 @@
 #end
 
 
+// Returns a movement opposite to the provided one.
+//
+// movement - a movement to be reflected.
+#macro rubik_cube_reflect_movement(movement)
+  <-1 * movement.x, -1 * movement.y, -1 * movement.z, movement.t>
+#end
+
+
+// Returns an array of movements opposite to the provided ones.
+//
+// movements - movements to be reflected.
+#macro rubik_cube_reflect_movements(movements)
+  #local number_of_movements = dimension_size(movements, 1);
+  #local result = array[number_of_movements];
+  #for (resultIx, 0, number_of_movements - 1)
+    #local result[resultIx] = rubik_cube_reflect_movement(movements[number_of_movements - 1 - resultIx]);
+  #end
+  result
+#end
+
+
+// Returns a merged array of movements.
+//
+// m1, m2 - arrays to be merged.
+#macro rubik_cube_merge_movements(m1, m2)
+  #local result = array[dimension_size(m1, 1) + dimension_size(m2, 1)];
+  #local resultIx = 0;
+  #for (m1Ix, 0, dimension_size(m1, 1) - 1)
+    #local result[resultIx] = m1[m1Ix];
+    #local resultIx = resultIx + 1;
+  #end
+  #for (m2Ix, 0, dimension_size(m2, 1) - 1)
+    #local result[resultIx] = m2[m2Ix];
+    #local resultIx = resultIx + 1;
+  #end
+  result
+#end
+
+
 // Checks if a movement has a rotation on 180 degrees.
 //
 // movement - movement to be examined.
