@@ -59,6 +59,34 @@ Colors order is the same as used in built-in `cubic` pattern: right,
 top, back, left, bottom and front.
 
 
+### [Layers Rotation](layers-rotation)
+
+Layers rotations are given in a form of an array. Each element of the
+array is a 4D vector, which describes a layer rotation. The first
+three elements of this vector are rotational vector. Only one of those
+elements can have a non-zero value. The last element is index of the
+layer to be rotated. The minimal index is zero. The layers are counted
+along the basis axis.
+
+![](layers-rotation/layers-rotation-3x3x3.png)
+
+All but the latest rotation in the array must rotate layers on -180,
+-90, 0, 90 or 180 degrees, because rotations on other angles
+(non-divisible by 90) 'breaks' the cube:
+```
+rubik_cube_rotate_layers(
+  ...,
+  array[2] {<-90, 0, 0, 1>, <0, -30, 0, 2>}
+)
+```
+
+The valid (non the latest) rotations for a non-square cuboid layer are
+limited by -180, 0 and 180 degrees, for the same reason. (though real
+cuboids can have 'broken' layers)
+
+![](layers-rotation/layers-rotation-2x4x2.png)
+
+
 Animations
 ----------
 
