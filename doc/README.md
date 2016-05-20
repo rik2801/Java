@@ -1,8 +1,16 @@
 POV-Ray Rubik's Cube
 ====================
 
-Static Cubes
-------------
+Basics
+------
+
+### Cube Dimensions
+
+Each cube consists of a number of pieces, which are kept internally as
+a 3D array. The dimensions of a cube are given in a form of a 3D
+vector. Each element of this vector corresponds to the cube dimension
+along the corresponding axis (in number of pieces).
+
 
 ### [Simple Cube](simple-cube)
 
