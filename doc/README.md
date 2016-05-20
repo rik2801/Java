@@ -87,8 +87,21 @@ cuboids can have 'broken' layers)
 ![](layers-rotation/layers-rotation-2x4x2.png)
 
 
-Animations
-----------
+### [Basic Animation](basic-animation)
+
+Layers rotations can be easily animated:
+
+![](basic-animation/basic-animation.gif)
+
+```
+rubik_cube_animate(
+  ...
+  array[2] {<-90, 0, 0, 1>, <0, -30, 0, 2>},
+  0,           // Clock value, the animation to be started at.
+  1            // Clock value, the animation to be finished at.
+)
+```
+
 
 ### [Cube Mixing](cube-mixing)
 
