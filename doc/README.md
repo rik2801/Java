@@ -4,9 +4,9 @@ POV-Ray Rubik's Cube
 Static Cubes
 ------------
 
-### Simple Cube ([simple-cube.pov](simple-cube.pov))
+### [Simple Cube](simple-cube)
 
-![](simple-cube.png)
+![](simple-cube/simple-cube.png)
 
 A solved classic 3x3x3 cube can be created in just two steps:
 
@@ -23,9 +23,9 @@ A solved classic 3x3x3 cube can be created in just two steps:
    ```
 
 
-### Cuboid ([cuboid.pov](cuboid.pov))
+### [Cuboid](cuboid)
 
-![](cuboid.png)
+![](cuboid/cuboid.png)
 
 Cuboids of any dimensions (for example, Rubik's Tower) can be created
 by altering dimensions:
@@ -34,9 +34,9 @@ by altering dimensions:
 ```
 
 
-### Colors Customization ([custom-colors.pov](custom-colors.pov))
+### [Colors Customization](colors-customization)
 
-![](custom-colors.png)
+![](colors-customization/colors-customization.png)
 
 Cube colors can be customized by passing an array of colors into the
 `rubik_cube_create_cube()` macro:
@@ -54,9 +54,9 @@ top, back, left, bottom and front.
 Animations
 ----------
 
-### Cube Mixing ([animation-mix.ini](animation-mix.ini)/[pov](animation-mix.pov))
+### [Cube Mixing](cube-mixing)
 
-![](animation-mix.gif)
+![](cube-mixing/cube-mixing.gif)
 
 1. Create a 3x3x3 cube with the classic color scheme:
    ```
@@ -89,7 +89,7 @@ Animations
    ```
 
 
-### Movements Reflection ([movements-reflection.ini](movements-reflection.ini)/[pov](movements-reflection.pov))
+### [Movements Reflection](movements-reflection)
 
 To return a cube back into its condition after layers rotations, those
 rotations can be 'reflected':
@@ -97,4 +97,4 @@ rotations can be 'reflected':
 rubik_cube_reflect_movements(fwd_movements)
 ```
 
-![](movements-reflection.gif)
+![](movements-reflection/movements-reflection.gif)
