@@ -1,4 +1,4 @@
-#include "demo.inc"
+#include "doc-scene.inc"
 #include "../rubik-cube.inc"
 
 

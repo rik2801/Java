@@ -1,4 +1,4 @@
-#include "demo.inc"
+#include "doc-scene.inc"
 #include "../rubik-cube.inc"
 
 #local rcube = rubik_cube_create_cube(<3, 3, 3>, rubik_cube_colors_classic);

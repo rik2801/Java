@@ -1,5 +1,5 @@
-Demo
-====
+POV-Ray Rubik's Cube
+====================
 
 Static Cubes
 ------------
