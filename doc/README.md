@@ -97,8 +97,31 @@ Layers rotations can be easily animated:
 rubik_cube_animate(
   ...
   array[2] {<-90, 0, 0, 1>, <0, -30, 0, 2>},
-  0,           // Clock value, the animation to be started at.
-  1            // Clock value, the animation to be finished at.
+  ...
+)
+```
+
+
+### [Animation Time Frame](animation-time-frame)
+
+The time when an animation should be started and finished can be
+easily configured.
+
+![](animation-time-frame/animation-time-frame.gif)
+
+```
+rubik_cube_animate(
+  cube1,
+  ...
+  0,           // Clock value, the first animation to be started at.
+  0.5          // Clock value, the first animation to be finished at.
+)
+...
+rubik_cube_animate(
+  cube2,
+  ...
+  0.5,         // Clock value, the second animation to be started at.
+  1            // Clock value, the second animation to be finished at.
 )
 ```
 
