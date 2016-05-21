@@ -4,12 +4,16 @@ POV-Ray Rubik's Cube
 Basics
 ------
 
-### Cube Dimensions
+### Cube Size and Dimensions
 
 Each cube consists of a number of pieces, which are kept internally as
 a 3D array. The dimensions of a cube are given in a form of a 3D
 vector. Each element of this vector corresponds to the cube dimension
 along the corresponding axis (in number of pieces).
+
+Pieces are cubes with side of length 1. Therefore, the size of the
+generated cube in numerical representation is equal to its
+dimensions. The center of the cube is placed in the origin.
 
 
 ### [Simple Cube](simple-cube)
