@@ -40,21 +40,21 @@
   #for (pos_x, 0, dim.x - 1)
     #for (pos_y, 0, dim.y - 1)
       #for (pos_z, 0, dim.z - 1)
-	#local piece_colors = colors;
-	#if (pos_x != 0)         #local piece_colors[3] = Black; #end
-	#if (pos_x != dim.x - 1) #local piece_colors[0] = Black; #end
-	#if (pos_y != 0)         #local piece_colors[4] = Black; #end
-	#if (pos_y != dim.y - 1) #local piece_colors[1] = Black; #end
-	#if (pos_z != 0)         #local piece_colors[5] = Black; #end
-	#if (pos_z != dim.z - 1) #local piece_colors[2] = Black; #end
+        #local piece_colors = colors;
+        #if (pos_x != 0)         #local piece_colors[3] = Black; #end
+        #if (pos_x != dim.x - 1) #local piece_colors[0] = Black; #end
+        #if (pos_y != 0)         #local piece_colors[4] = Black; #end
+        #if (pos_y != dim.y - 1) #local piece_colors[1] = Black; #end
+        #if (pos_z != 0)         #local piece_colors[5] = Black; #end
+        #if (pos_z != dim.z - 1) #local piece_colors[2] = Black; #end
 
-	#local rcube[pos_x][pos_y][pos_z] =
-	object {
-	  rubik_cube_create_piece(piece_colors)
-	  transform {
-	    translate <pos_x, pos_y, pos_z> - <dim.x / 2, dim.y / 2, dim.z / 2>
-	  }
-	}
+        #local rcube[pos_x][pos_y][pos_z] =
+        object {
+          rubik_cube_create_piece(piece_colors)
+          transform {
+            translate <pos_x, pos_y, pos_z> - <dim.x / 2, dim.y / 2, dim.z / 2>
+          }
+        }
       #end
     #end
   #end
