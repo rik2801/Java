@@ -68,9 +68,11 @@ top, back, left, bottom and front.
 Layers rotations are given in a form of an array. Each element of the
 array is a 4D vector, which describes a layer rotation. The first
 three elements of this vector are rotational vector. Only one of those
-elements can have a non-zero value. The last element is index of the
-layer to be rotated. The minimal index is zero. The layers are counted
-along the basis axis.
+elements can have a non-zero value. The absolute value of the last
+element is index of the layer to be rotated. The minimal index is
+zero. The layers are counted along the basis axis. The fact that the
+absolute value is used can be used to rotate a layer back by
+multiplying a movement vector by -1.
 
 ![](layers-rotation/layers-rotation-3x3x3.png)
 
@@ -89,6 +91,32 @@ limited by -180, 0 and 180 degrees, for the same reason. (though real
 cuboids can have 'broken' layers)
 
 ![](layers-rotation/layers-rotation-2x4x2.png)
+
+
+#### [David Singmaster's Notation](notation)
+
+File [rubik-cube-notation.inc](../rubik-cube-notation.inc) contains
+shorthands for writing movements in the
+[extended Singmaster's notation](https://en.wikipedia.org/wiki/Rubik%27s_Cube#Move_notation)
+for 3x3x3 cubes.
+
+![](notation/notation.png)
+
+```
+#local superflip = array[20] {
+  U, R2, F, B, R, B2, R, U2, L, B2, R, -U, -D, R2, F, -R, L, B2, U2, F2
+};
+```
+
+The letters L, R, F, B, U and D indicate a 90 degrees clockwise turn
+of the left, right, front, back, up and down face respectively. 180
+degrees turns are indicated by appending a 2. A counterclockwise turn
+is indicated by adding `-` before a letter (a prime symbol is used in
+the original notation).
+
+The notation is extended with letters M, E and S. They indicate middle
+(between L and R), equator (between U and D) and standing (between F
+and B) layers respectively.
 
 
 ### [Basic Animation](basic-animation)

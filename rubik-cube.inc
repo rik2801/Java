@@ -225,9 +225,9 @@
     #for (pos_y, 0, dim.y - 1)
       #for (pos_z, 0, dim.z - 1)
         // Only pieces belonging to the layer movement.t must be rotated.
-        #if (!((VEq(rot_axis, x) & (pos_x != movement.t)) |
-               (VEq(rot_axis, y) & (pos_y != movement.t)) |
-               (VEq(rot_axis, z) & (pos_z != movement.t))))
+        #if (!((VEq(rot_axis, x) & (pos_x != abs(movement.t))) |
+               (VEq(rot_axis, y) & (pos_y != abs(movement.t))) |
+               (VEq(rot_axis, z) & (pos_z != abs(movement.t)))))
 
           #if ((is_latest = 0) |
                rubik_cube_is_rotation_valid(dim, rot_axis, a))
@@ -321,7 +321,7 @@
 //   1 - same layer is rotated.
 #macro rubik_cube_is_same_layer_rotated(movement1, movement2)
   #local result = 0;
-  #if (movement1.t = movement2.t)
+  #if (abs(movement1.t) = abs(movement2.t))
     #local axis1 = <movement1.x, movement1.y, movement1.z>;
     #local axis2 = <movement2.x, movement2.y, movement2.z>;
     #local angle_between_axes = VAngleD(axis1, axis2);
@@ -367,14 +367,6 @@
 #end
 
 
-// Returns a movement opposite to the provided one.
-//
-// movement - a movement to be reflected.
-#macro rubik_cube_reflect_movement(movement)
-  <-1 * movement.x, -1 * movement.y, -1 * movement.z, movement.t>
-#end
-
-
 // Returns an array of movements opposite to the provided ones.
 //
 // movements - movements to be reflected.
@@ -382,7 +374,7 @@
   #local number_of_movements = dimension_size(movements, 1);
   #local result = array[number_of_movements];
   #for (resultIx, 0, number_of_movements - 1)
-    #local result[resultIx] = rubik_cube_reflect_movement(movements[number_of_movements - 1 - resultIx]);
+    #local result[resultIx] = -movements[number_of_movements - 1 - resultIx];
   #end
   result
 #end
