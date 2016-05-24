@@ -5,7 +5,7 @@
 // Classic colors used for Rubik's Cubes. White is opposite to yellow,
 // red is opposite to orange and blue is opposite to green. Red, white
 // and blue colors are clockwise arranged.
-#declare rubik_cube_colors_classic = array[6] {Blue, Red, Yellow, Green, Orange, White};
+#declare rubik_cube_colors_classic = array[6] {Green, Red, Yellow, Blue, Orange, White};
 
 
 // Generates a piece of cube with defined colors.
