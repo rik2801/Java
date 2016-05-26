@@ -9,7 +9,7 @@ some nice patterns. A lot of patterns are got from site
 All patterns have common prefix `rubik_cube_patterns_3x3x3_`. Only the
 remaining part of variable names are stated in the table below.
 
-|                    |
-|:------------------:|
-| ![](superflip.png) |
-| `superflip`        |
+|                               |                    |
+|:-----------------------------:|:------------------:|
+| ![](checkerboard-twisted.png) | ![](superflip.png) |
+| `checkerboard_twisted`        | `superflip`        |
