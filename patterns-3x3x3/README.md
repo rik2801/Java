@@ -7,9 +7,11 @@ some nice patterns. A lot of patterns are got from site
 [ruwix.com](https://ruwix.com).
 
 All patterns have common prefix `rubik_cube_patterns_3x3x3_`. Only the
-remaining part of variable names are stated in the table below.
+remaining part of variable names are stated in the table below. The
+suffix `exchanged` means that opposite sides exchanged by pieces. The
+suffix `twisted` meanse that adjacent sides exchanged by pieces.
 
-|                               |                    |
-|:-----------------------------:|:------------------:|
-| ![](checkerboard-twisted.png) | ![](superflip.png) |
-| `checkerboard_twisted`        | `superflip`        |
+|                                 |                               |                    |
+|:-------------------------------:|:-----------------------------:|:------------------:|
+| ![](checkerboard-exchanged.png) | ![](checkerboard-twisted.png) | ![](superflip.png) |
+| `checkerboard_exchanged`        | `checkerboard_twisted`        | `superflip`        |
