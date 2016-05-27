@@ -36,6 +36,14 @@ rubik_cube_patterns_3x3x3_cube_in_cube_in_cube
 ![](cube-in-cube-in-cube/cube-in-cube-in-cube.png)
 
 
+[Spiral](spiral)
+----------------
+```
+rubik_cube_patterns_3x3x3_spiral
+```
+![](spiral/spiral.png)
+
+
 [The Superflip](superflip)
 --------------------------
 Every piece is where it's supposed to be but the edges are oriented

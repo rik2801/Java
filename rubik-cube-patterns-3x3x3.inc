@@ -16,6 +16,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_spiral = array[16] {
+  -L, -B, D, U, R, -U, -R, D2, R2, D, L, -D, -L, -R, F, U
+};
+
+
 #declare rubik_cube_patterns_3x3x3_superflip = array[20] {
   U, R2, F, B, R, B2, R, U2, L, B2, R, -U, -D, R2, F, -R, L, B2, U2, F2
 };
