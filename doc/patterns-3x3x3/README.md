@@ -61,3 +61,11 @@ rubik_cube_patterns_3x3x3_superflip
 rubik_cube_patterns_3x3x3_tablecloth
 ```
 ![](tablecloth/tablecloth.png)
+
+
+[Vertical Stripes](vertical-stripes)
+------------------------------------
+```
+rubik_cube_patterns_3x3x3_vertical_stripes
+```
+![](vertical-stripes/vertical-stripes.png)

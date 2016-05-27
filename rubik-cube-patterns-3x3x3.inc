@@ -29,3 +29,8 @@
 #declare rubik_cube_patterns_3x3x3_tablecloth = array[19] {
   R, L, U2, -F, U2, D2, R2, L2, -F, D2, F2, D, R2, L2, F2, B2, D, B2, L2
 };
+
+
+#declare rubik_cube_patterns_3x3x3_vertical_stripes = array[17] {
+  F, U, F, R, L2, B, -D, R, D2, L, -D, B, R2, L, F, U, F
+};
