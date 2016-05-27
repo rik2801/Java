@@ -14,26 +14,26 @@ suffix `twisted` meanse that adjacent sides exchanged by pieces.
 Checkerboards
 -------------
 
-### Exchanged
+### [Exchanged](checkerboard-exchanged)
 ```
 rubik_cube_patterns_3x3x3_checkerboard_exchanged
 ```
-![](checkerboard-exchanged.png)
+![](checkerboard-exchanged/checkerboard-exchanged.png)
 
 
-### Twisted
+### [Twisted](checkerboard-twisted)
 ```
 rubik_cube_patterns_3x3x3_checkerboard_twisted
 ```
-![](checkerboard-twisted.png)
+![](checkerboard-twisted/checkerboard-twisted.png)
 
 
-The Superflip
--------------
+[The Superflip](superflip)
+--------------------------
 Every piece is where it's supposed to be but the edges are oriented
 wrong. It is need the highest amount of steps (20) to solve this
 state.
 ```
 rubik_cube_patterns_3x3x3_superflip
 ```
-![](superflip.png)
+![](superflip/superflip.png)
