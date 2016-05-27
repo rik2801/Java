@@ -18,4 +18,4 @@ The library supports the following features:
 - Random [cube mixing](doc#cube-mixing).
 - [Movements reflection](doc#movements-reflection) - layers rotation
   in the order opposite to a provided one.
-- A set of predefined [patterns](patterns-3x3x3) for 3x3x3 cubes.
+- A set of predefined [patterns](doc/patterns-3x3x3) for 3x3x3 cubes.
