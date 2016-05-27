@@ -6,12 +6,34 @@ contains movements which can be applied to a non-mixed cube to produce
 some nice patterns. A lot of patterns are got from site
 [ruwix.com](https://ruwix.com).
 
-All patterns have common prefix `rubik_cube_patterns_3x3x3_`. Only the
-remaining part of variable names are stated in the table below. The
+All patterns have common prefix `rubik_cube_patterns_3x3x3_`. The
 suffix `exchanged` means that opposite sides exchanged by pieces. The
 suffix `twisted` meanse that adjacent sides exchanged by pieces.
 
-|                                 |                               |                    |
-|:-------------------------------:|:-----------------------------:|:------------------:|
-| ![](checkerboard-exchanged.png) | ![](checkerboard-twisted.png) | ![](superflip.png) |
-| `checkerboard_exchanged`        | `checkerboard_twisted`        | `superflip`        |
+
+Checkerboards
+-------------
+
+### Exchanged
+```
+rubik_cube_patterns_3x3x3_checkerboard_exchanged
+```
+![](checkerboard-exchanged.png)
+
+
+### Twisted
+```
+rubik_cube_patterns_3x3x3_checkerboard_twisted
+```
+![](checkerboard-twisted.png)
+
+
+The Superflip
+-------------
+Every piece is where it's supposed to be but the edges are oriented
+wrong. It is need the highest amount of steps (20) to solve this
+state.
+```
+rubik_cube_patterns_3x3x3_superflip
+```
+![](superflip.png)
