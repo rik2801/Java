@@ -11,9 +11,11 @@
 };
 
 
-// Every piece is where it's supposed to be but the edges are oriented
-// wrong. It is need the highest amount of steps (20) to solve this
-// state.
 #declare rubik_cube_patterns_3x3x3_superflip = array[20] {
   U, R2, F, B, R, B2, R, U2, L, B2, R, -U, -D, R2, F, -R, L, B2, U2, F2
+};
+
+
+#declare rubik_cube_patterns_3x3x3_tablecloth = array[19] {
+  R, L, U2, -F, U2, D2, R2, L2, -F, D2, F2, D, R2, L2, F2, B2, D, B2, L2
 };

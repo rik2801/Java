@@ -37,3 +37,11 @@ state.
 rubik_cube_patterns_3x3x3_superflip
 ```
 ![](superflip/superflip.png)
+
+
+[Table Cloth](tablecloth)
+-------------------------
+```
+rubik_cube_patterns_3x3x3_tablecloth
+```
+![](tablecloth/tablecloth.png)
