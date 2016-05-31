@@ -36,6 +36,14 @@ rubik_cube_patterns_3x3x3_cube_in_cube_in_cube
 ![](cube-in-cube-in-cube/cube-in-cube-in-cube.png)
 
 
+[Opposite Corners](opposite-corners)
+------------------------------------
+```
+rubik_cube_patterns_3x3x3_opposite_corners
+```
+![](opposite-corners/opposite-corners.png)
+
+
 [SpeedSolving.com](speedsolving.com)
 ------------------------------------
 [SpeedSolving.com](https://www.speedsolving.com) site logo.
