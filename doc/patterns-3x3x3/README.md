@@ -36,6 +36,15 @@ rubik_cube_patterns_3x3x3_cube_in_cube_in_cube
 ![](cube-in-cube-in-cube/cube-in-cube-in-cube.png)
 
 
+[SpeedSolving.com](speedsolving.com)
+------------------------------------
+[SpeedSolving.com](https://www.speedsolving.com) site logo.
+```
+rubik_cube_patterns_3x3x3_speedsolving_com
+```
+![](speedsolving.com/speedsolving.com.png)
+
+
 [Spiral](spiral)
 ----------------
 ```

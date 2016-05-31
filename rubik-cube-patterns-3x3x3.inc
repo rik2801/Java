@@ -16,6 +16,12 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_speedsolving_com = array[12] {
+  // -R, -L, U2, F2, D2, F2, R, L, B2, U2, B2, U2
+  R, L, U2, F2, D2, F2, -R, -L, B2, U2, B2, U2
+};
+
+
 #declare rubik_cube_patterns_3x3x3_spiral = array[16] {
   -L, -B, D, U, R, -U, -R, D2, R2, D, L, -D, -L, -R, F, U
 };
