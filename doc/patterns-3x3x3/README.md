@@ -11,6 +11,14 @@ suffix `exchanged` means that opposite sides exchanged by pieces. The
 suffix `twisted` meanse that adjacent sides exchanged by pieces.
 
 
+[Anaconda](anaconda)
+--------------------
+```
+rubik_cube_patterns_3x3x3_anaconda
+```
+![](anaconda/anaconda.png)
+
+
 Checkerboards
 -------------
 

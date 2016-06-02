@@ -1,6 +1,11 @@
 #include "rubik-cube-notation.inc"
 
 
+#declare rubik_cube_patterns_3x3x3_anaconda = array[14] {
+  L, U, -B, -U, R, -L, B, -R, F, -B, D, R, -D, -F
+};
+
+
 #declare rubik_cube_patterns_3x3x3_checkerboard_exchanged = array[3] {
   M2, E2, S2
 };
