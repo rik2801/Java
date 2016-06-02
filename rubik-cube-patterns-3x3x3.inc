@@ -21,6 +21,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_cube_in_cube = array[15] {
+  F, L, F, -U, R, U, F2, L2, -U, -L, B, -D, -B, L2, U
+};
+
+
 #declare rubik_cube_patterns_3x3x3_cube_in_cube_in_cube = array[18] {
   -U, -L, -U, -F, R2, -B, R, F, U, B2, U, -B, L, -U, F, U, R, -F
 };

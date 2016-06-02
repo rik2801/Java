@@ -45,8 +45,17 @@ rubik_cube_patterns_3x3x3_cross_twisted
 ![](cross-twisted/cross-twisted.png)
 
 
-[Cube in Cube in Cube](cube-in-cube-in-cube)
---------------------------------------------
+Cube in Cube in ...
+-------------------
+
+### [Cube in Cube](cube-in-cube)
+```
+rubik_cube_patterns_3x3x3_cube_in_cube
+```
+![](cube-in-cube/cube-in-cube.png)
+
+
+### [Cube in Cube in Cube](cube-in-cube-in-cube)
 ```
 rubik_cube_patterns_3x3x3_cube_in_cube_in_cube
 ```
