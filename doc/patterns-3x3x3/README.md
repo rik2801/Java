@@ -28,6 +28,14 @@ rubik_cube_patterns_3x3x3_checkerboard_twisted
 ![](checkerboard-twisted/checkerboard-twisted.png)
 
 
+[Cross](cross)
+--------------
+```
+rubik_cube_patterns_3x3x3_cross
+```
+![](cross/cross.png)
+
+
 [Cube in Cube in Cube](cube-in-cube-in-cube)
 --------------------------------------------
 ```
