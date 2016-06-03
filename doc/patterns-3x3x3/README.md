@@ -78,6 +78,14 @@ rubik_cube_patterns_3x3x3_cube_in_cube_in_cube
 ![](cube-in-cube-in-cube/cube-in-cube-in-cube.png)
 
 
+[Green Mamba](green-mamba)
+--------------------------
+```
+rubik_cube_patterns_3x3x3_green_mamba
+```
+![](green-mamba/green-mamba.png)
+
+
 [Opposite Corners](opposite-corners)
 ------------------------------------
 ```

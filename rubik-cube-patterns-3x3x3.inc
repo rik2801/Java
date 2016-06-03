@@ -41,6 +41,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_green_mamba = array[13] {
+  R, D, R, F, -R, -F, B, D, -R, -U, -B, U, D2
+};
+
+
 #declare rubik_cube_patterns_3x3x3_opposite_corners = array[12] {
   R, L, U2, F2, D2, F2, R, L, F2, D2, B2, D2
 };
