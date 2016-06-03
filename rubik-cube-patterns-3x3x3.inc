@@ -21,6 +21,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_checkerboard_with_faces = array[8] {
+  U2, F2, U2, F2, B2, U2, F2, D2
+};
+
+
 #declare rubik_cube_patterns_3x3x3_checkerboard_twisted = array[16] {
   F, B2, -R, D2, B, R, U, -D, R, -L, -D, -F, R2, D, F2, -B
 };

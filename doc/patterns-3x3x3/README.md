@@ -45,6 +45,13 @@ rubik_cube_patterns_3x3x3_checkerboard_exchanged
 ![](checkerboard-exchanged/checkerboard-exchanged.png)
 
 
+### [Faces](checkerboard-faces)
+```
+rubik_cube_patterns_3x3x3_checkerboard_with_faces
+```
+![](checkerboard-faces/checkerboard-faces.png)
+
+
 ### [Twisted](checkerboard-twisted)
 ```
 rubik_cube_patterns_3x3x3_checkerboard_twisted
