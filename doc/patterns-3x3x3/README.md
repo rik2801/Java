@@ -19,6 +19,14 @@ rubik_cube_patterns_3x3x3_anaconda
 ![](anaconda/anaconda.png)
 
 
+[Black Mamba](black-mamba)
+--------------------------
+```
+rubik_cube_patterns_3x3x3_black_mamba
+```
+![](black-mamba/black-mamba.png)
+
+
 Checkerboards
 -------------
 

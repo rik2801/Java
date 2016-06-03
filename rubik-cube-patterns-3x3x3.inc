@@ -6,6 +6,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_black_mamba = array[14] {
+  R, D, L, -F, R, -L, D, -R, U, -D, B, -U, -R, -D
+};
+
+
 #declare rubik_cube_patterns_3x3x3_checkerboard_exchanged = array[3] {
   M2, E2, S2
 };
