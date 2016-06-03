@@ -92,6 +92,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_tetris = array[8] {
+  L, R, F, B, -U, -D, -L, -R
+};
+
+
 #declare rubik_cube_patterns_3x3x3_twister = array[14] {
   F, -R, U, L, -F, -L, F, -U, R, U, -L, -U, L, -F
 };

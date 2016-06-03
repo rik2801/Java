@@ -163,6 +163,14 @@ rubik_cube_patterns_3x3x3_tablecloth
 ![](tablecloth/tablecloth.png)
 
 
+[Tetris](tetris)
+----------------
+```
+rubik_cube_patterns_3x3x3_tetris
+```
+![](tetris/tetris.png)
+
+
 [Twister](twister)
 ------------------
 ```
