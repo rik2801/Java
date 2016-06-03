@@ -11,6 +11,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_center_edge_corner = array[20] {
+  -U, R2, L2, F2, B2, -U, R, L, F, -B, U, F2, D2, R2, L2, F2, U2, F2, -U, F2
+};
+
+
 #declare rubik_cube_patterns_3x3x3_checkerboard_exchanged = array[3] {
   M2, E2, S2
 };

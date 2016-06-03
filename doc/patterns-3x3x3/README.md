@@ -27,6 +27,14 @@ rubik_cube_patterns_3x3x3_black_mamba
 ![](black-mamba/black-mamba.png)
 
 
+[Center-Edge-Corner](center-edge-corner)
+----------------------------------------
+```
+rubik_cube_patterns_3x3x3_center_edge_corner
+```
+![](center-edge-corner/center-edge-corner.png)
+
+
 Checkerboards
 -------------
 
