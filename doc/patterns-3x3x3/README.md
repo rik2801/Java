@@ -52,6 +52,13 @@ rubik_cube_patterns_3x3x3_checkerboard_twisted
 ![](checkerboard-twisted/checkerboard-twisted.png)
 
 
+### [Zigzag](checkerboard-zigzag)
+```
+rubik_cube_patterns_3x3x3_checkerboard_with_zigzag
+```
+![](checkerboard-zigzag/checkerboard-zigzag.png)
+
+
 Cross
 -----
 

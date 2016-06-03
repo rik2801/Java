@@ -26,6 +26,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_checkerboard_with_zigzag = array[11] {
+  R2, L2, F2, B2, U, F2, B2, U2, F2, B2, U
+};
+
+
 #declare rubik_cube_patterns_3x3x3_cross = array[11] {
   U, F, -B, L2, U2, L2, -F, B, U2, L2, U
 };
