@@ -119,6 +119,23 @@ rubik_cube_patterns_3x3x3_spiral
 ![](spiral/spiral.png)
 
 
+Spots
+-----
+
+### [Four](spots-four)
+```
+rubik_cube_patterns_3x3x3_spots_4
+```
+![](spots-four/spots-four.png)
+
+
+### [Six](spots-six)
+```
+rubik_cube_patterns_3x3x3_spots_6
+```
+![](spots-six/spots-six.png)
+
+
 [The Superflip](superflip)
 --------------------------
 Every piece is where it's supposed to be but the edges are oriented

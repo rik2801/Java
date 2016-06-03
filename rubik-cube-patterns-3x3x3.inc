@@ -67,6 +67,16 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_spots_4 = array[8] {
+  F2, B2, U, -D, R2, L2, U, -D
+};
+
+
+#declare rubik_cube_patterns_3x3x3_spots_6 = array[4] {
+  E, S, -E, -S
+};
+
+
 #declare rubik_cube_patterns_3x3x3_superflip = array[20] {
   U, R2, F, B, R, B2, R, U2, L, B2, R, -U, -D, R2, F, -R, L, B2, U2, F2
 };
