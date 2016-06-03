@@ -199,3 +199,11 @@ rubik_cube_patterns_3x3x3_twister
 rubik_cube_patterns_3x3x3_vertical_stripes
 ```
 ![](vertical-stripes/vertical-stripes.png)
+
+
+[Wire](wire)
+------------
+```
+rubik_cube_patterns_3x3x3_wire
+```
+![](wire/wire.png)

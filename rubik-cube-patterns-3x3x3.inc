@@ -115,3 +115,8 @@
 #declare rubik_cube_patterns_3x3x3_vertical_stripes = array[17] {
   F, U, F, R, L2, B, -D, R, D2, L, -D, B, R2, L, F, U, F
 };
+
+
+#declare rubik_cube_patterns_3x3x3_wire = array[18] {
+  R, L, F, B, R, L, F, B, R, L, F, B, R2, B2, L2, R2, B2, L2
+};
