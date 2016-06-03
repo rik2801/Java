@@ -87,6 +87,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_twister = array[14] {
+  F, -R, U, L, -F, -L, F, -U, R, U, -L, -U, L, -F
+};
+
+
 #declare rubik_cube_patterns_3x3x3_vertical_stripes = array[17] {
   F, U, F, R, L2, B, -D, R, D2, L, -D, B, R2, L, F, U, F
 };

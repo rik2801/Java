@@ -155,6 +155,14 @@ rubik_cube_patterns_3x3x3_tablecloth
 ![](tablecloth/tablecloth.png)
 
 
+[Twister](twister)
+------------------
+```
+rubik_cube_patterns_3x3x3_twister
+```
+![](twister/twister.png)
+
+
 [Vertical Stripes](vertical-stripes)
 ------------------------------------
 ```
