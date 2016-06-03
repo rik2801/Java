@@ -78,6 +78,14 @@ rubik_cube_patterns_3x3x3_opposite_corners
 ![](opposite-corners/opposite-corners.png)
 
 
+[Python](python)
+----------------
+```
+rubik_cube_patterns_3x3x3_python
+```
+![](python/python.png)
+
+
 [SpeedSolving.com](speedsolving.com)
 ------------------------------------
 [SpeedSolving.com](https://www.speedsolving.com) site logo.

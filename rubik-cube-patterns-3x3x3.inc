@@ -41,6 +41,11 @@
 };
 
 
+#declare rubik_cube_patterns_3x3x3_python = array[14] {
+  F2, -R, -B, U, -R, L, -F, L, -F, B, -D, R, B, L2
+};
+
+
 #declare rubik_cube_patterns_3x3x3_speedsolving_com = array[12] {
   // -R, -L, U2, F2, D2, F2, R, L, B2, U2, B2, U2
   R, L, U2, F2, D2, F2, -R, -L, B2, U2, B2, U2
