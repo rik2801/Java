@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# This script renders all pov-files in the current directory and
+# compares resulting images against prerendered ones.
+
+
+POVRAY="/cygdrive/c/Program Files/POV-Ray/v3.7/bin/pvengine64.exe";
+
+for test_file in $(ls *.pov)
+do
+    test_name=${test_file%.pov};
+    "$POVRAY" /render "$test_file" output_file_name="result.png" height=240 width=320 /exit;
+    value=`magick compare -metric psnr "result.png" "$test_name.png" diff.png 2>&1`;
+
+    if [ "$value" == "1.#INF" ]
+    then
+        printf "PASS\t$test_name";
+    else
+        printf "FAIL\t$test_name";
+    fi
+done
+
+rm -f result.png diff.png
