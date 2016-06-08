@@ -1,23 +1,50 @@
 #!/usr/bin/env bash
 
-# This script renders all pov-files in the current directory and
-# compares resulting images against prerendered ones.
+# Renders files listed in 'tests' file and compares resulting images
+# against prerendered ones. Pre-rendered files must have the same
+# names as files to be rendered but with 'png' extensions.
+
+IFS="" # Do not split strings (http://www.tldp.org/LDP/abs/html/internalvariables.html#IFSREF).
+POVRAY="/cygdrive/c/Program Files/POV-Ray/v3.7/bin/pvengine64.exe"
+
+# Temporary file with difference of newly rendered and pre-rendered
+# files.
+DIFF=$(cygpath -w $(pwd)/diff.png)
 
 
-POVRAY="/cygdrive/c/Program Files/POV-Ray/v3.7/bin/pvengine64.exe";
+# Renders a file and compare it with the pre-rendered one.
+# $1 - file to be rendered.
+run_test() {
+    local file_to_be_rendered=$(cygpath -w "$1")
+    local file_to_be_rendered_dir=$(dirname "$file_to_be_rendered")
+    local pre_rendered_file=$(cygpath -w "${file_to_be_rendered%%.*}.png")
+    local rendered_file=$(cygpath -w "$file_to_be_rendered_dir"/test-result.png)
 
-for test_file in $(ls *.pov)
-do
-    test_name=${test_file%.pov};
-    "$POVRAY" /render "$test_file" output_file_name="result.png" height=240 width=320 /exit;
-    value=`magick compare -metric psnr "result.png" "$test_name.png" diff.png 2>&1`;
-
-    if [ "$value" == "1.#INF" ]
-    then
-        printf "PASS\t$test_name";
-    else
-        printf "FAIL\t$test_name";
+    if ! [[ -e $file_to_be_rendered ]]; then
+        printf "ABSENT\t%s\n" "$file_to_be_rendered"
+        continue
     fi
-done
 
-rm -f result.png diff.png
+    "$POVRAY" /render "$file_to_be_rendered" output_file_name="test-result.png" /exit
+    local value=`magick compare -metric psnr "$rendered_file" "$pre_rendered_file" "$DIFF" 2>&1`
+
+    if [ "$value" == "1.#INF" ]; then
+        printf "PASSED\t%s\n" "$file_to_be_rendered"
+    else
+        printf "FAILED\t%s\n" "$file_to_be_rendered"
+    fi
+
+    rm -f "$rendered_file"      # Remove temporary file.
+}
+
+
+# Entry point.
+while read -r name || [[ -n "$name" ]] # -n is needed to process the last line if it does not end by newline.
+do
+    # Skip comments.
+    if [[ $name =~ ^# ]]; then continue; fi
+
+    run_test $name
+done < "tests";
+
+rm -f "$DIFF"                   # Remove temporary file.
