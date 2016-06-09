@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Renders files listed in 'tests' file and compares resulting images
-# against prerendered ones. Pre-rendered files must have the same
-# names as files to be rendered but with 'png' extensions.
+# Renders files listed in 'tests' file (by default) or passed as
+# command line arguments and compares rendered images against
+# prerendered ones. Pre-rendered images must have the same names as
+# files to be rendered but with 'png' extensions.
 
 IFS="" # Do not split strings (http://www.tldp.org/LDP/abs/html/internalvariables.html#IFSREF).
 POVRAY="/cygdrive/c/Program Files/POV-Ray/v3.7/bin/pvengine64.exe"
@@ -39,12 +40,18 @@ run_test() {
 
 
 # Entry point.
-while read -r name || [[ -n "$name" ]] # -n is needed to process the last line if it does not end by newline.
-do
-    # Skip comments.
-    if [[ $name =~ ^# ]]; then continue; fi
+if [[ "$#" -eq 0 ]]; then
+    while read -r name || [[ -n "$name" ]] # -n is needed to process the last line if it does not end by newline.
+    do
+        # Skip comments.
+        if [[ $name =~ ^# ]]; then continue; fi
 
-    run_test $name
-done < "tests";
+        run_test $name
+    done < "tests"
+else
+    for name in "$@"; do
+        run_test $name
+    done
+fi
 
 rm -f "$DIFF"                   # Remove temporary file.
