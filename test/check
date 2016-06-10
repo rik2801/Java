@@ -12,6 +12,12 @@ POVRAY="/cygdrive/c/Program Files/POV-Ray/v3.7/bin/pvengine64.exe"
 # files.
 DIFF=$(cygpath -w $(pwd)/diff.png)
 
+# Colors for output.
+RED=$(tput setaf 1)$(tput bold)
+GREEN=$(tput setaf 2)$(tput bold)
+YELLOW=$(tput setaf 3)$(tput bold)
+NORMAL=$(tput sgr0)
+
 
 # Renders a file and compare it with the pre-rendered one.
 # $1 - file to be rendered.
@@ -22,7 +28,7 @@ run_test() {
     local rendered_file=$(cygpath -w "$file_to_be_rendered_dir"/test-result.png)
 
     if ! [[ -e $file_to_be_rendered ]]; then
-        printf "ABSENT\t%s\n" "$file_to_be_rendered"
+        printf "${YELLOW}ABSENT${NORMAL}\t%s\n" "$file_to_be_rendered"
         continue
     fi
 
@@ -30,9 +36,9 @@ run_test() {
     local value=`magick compare -metric psnr "$rendered_file" "$pre_rendered_file" "$DIFF" 2>&1`
 
     if [ "$value" == "1.#INF" ]; then
-        printf "PASSED\t%s\n" "$file_to_be_rendered"
+        printf "${GREEN}PASSED${NORMAL}\t%s\n" "$file_to_be_rendered"
     else
-        printf "FAILED\t%s\n" "$file_to_be_rendered"
+        printf "${RED}FAILED${NORMAL}\t%s\n" "$file_to_be_rendered"
     fi
 
     rm -f "$rendered_file"      # Remove temporary file.
