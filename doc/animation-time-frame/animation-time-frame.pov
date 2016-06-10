@@ -1,5 +1,5 @@
 #include "../doc-scene.inc"
-#include "../../rubik-cube.inc"
+#include "rubik-cube.inc"
 
 camera {
   location <0, 3, -7>

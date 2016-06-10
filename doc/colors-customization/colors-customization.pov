@@ -1,5 +1,5 @@
 #include "../doc-scene.inc"
-#include "../../rubik-cube.inc"
+#include "rubik-cube.inc"
 
 
 rubik_cube_to_object(
