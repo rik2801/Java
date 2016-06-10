@@ -8,21 +8,50 @@
 #declare rubik_cube_colors_classic = array[6] {Green, Red, Yellow, Blue, Orange, White};
 
 
-// Generates a piece of cube with defined colors.
+// Generates a piece of cube.
 //
-// colors - array of six colors to be applied for the piece. Colors
-//   are ordered in the same manner as for rubik_cube_create_cube()
-//   macro.
+// dim - dimensions of the cube (3D vector).
+// pos - piece position (3D vector), where the coordinates are numbers
+//   from 0 to corresponding dimension minus one.
+// gen_name - name of the file that contains the generator
+//   implementation.
+// gen_param - a parameter which is passed to the generator. If
+//   several parameters must be passed, they can be combined in an
+//   array.
+//
+// Normally, a generator returns a piece which is embedded into a cube
+// with coordinates <0, 0, 0>, <1, 1, 1>.
 //
 // Returns the generated piece.
-#macro rubik_cube_create_piece(colors)
-  object {
-    Round_Box(<-0.5, -0.5, -0.5>, <0.5, 0.5, 0.5>, 0.1, 1)
-    pigment {
-      cubic colors[0], colors[1], colors[2], colors[3], colors[4], colors[5]
-    }
-    translate <0.5, 0.5, 0.5>
-  }
+#macro rubik_cube_generate_piece(dim, pos, gen_name, gen_param)
+  #include gen_name
+#end
+
+
+// Returns a new cube (3D array of the generated cube pieces).
+// Pieces of the cube are created by the provided generator.
+//
+// dim - dimensions of the cube (3D vector).
+// gen_name - name of the file that contains the generator
+//   implementation.
+// gen_param - parameter which is passed to the generator.
+#macro rubik_cube_generate_cube(dim, gen_name, gen_param)
+  #local rcube = array[dim.x][dim.y][dim.z];
+  #for (pos_x, 0, dim.x - 1)
+    #for (pos_y, 0, dim.y - 1)
+      #for (pos_z, 0, dim.z - 1)
+        #local rcube[pos_x][pos_y][pos_z] =
+        object {
+          rubik_cube_generate_piece(dim, <pos_x, pos_y, pos_z>, gen_name, gen_param)
+          transform {
+            translate <pos_x, pos_y, pos_z> - <dim.x / 2, dim.y / 2, dim.z / 2>
+          }
+        }
+      #end
+    #end
+  #end
+
+  rcube
 #end
 
 
@@ -36,30 +65,7 @@
 //   face (2); left face (3); bottom face (4); front face (5).
 //   Note. Interior faces are colored in black.
 #macro rubik_cube_create_cube(dim, colors)
-  #local rcube = array[dim.x][dim.y][dim.z];
-  #for (pos_x, 0, dim.x - 1)
-    #for (pos_y, 0, dim.y - 1)
-      #for (pos_z, 0, dim.z - 1)
-        #local piece_colors = colors;
-        #if (pos_x != 0)         #local piece_colors[3] = Black; #end
-        #if (pos_x != dim.x - 1) #local piece_colors[0] = Black; #end
-        #if (pos_y != 0)         #local piece_colors[4] = Black; #end
-        #if (pos_y != dim.y - 1) #local piece_colors[1] = Black; #end
-        #if (pos_z != 0)         #local piece_colors[5] = Black; #end
-        #if (pos_z != dim.z - 1) #local piece_colors[2] = Black; #end
-
-        #local rcube[pos_x][pos_y][pos_z] =
-        object {
-          rubik_cube_create_piece(piece_colors)
-          transform {
-            translate <pos_x, pos_y, pos_z> - <dim.x / 2, dim.y / 2, dim.z / 2>
-          }
-        }
-      #end
-    #end
-  #end
-
-  rcube
+  rubik_cube_generate_cube(dim, "rubik-cube-generator-cube.inc", colors)
 #end
 
 

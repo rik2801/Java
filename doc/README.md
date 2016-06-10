@@ -187,3 +187,56 @@ rubik_cube_reflect_movements(fwd_movements)
 ```
 
 ![](movements-reflection/movements-reflection.gif)
+
+
+Advanced Technics
+-----------------
+
+### [Piece Generators](piece-generators)
+
+Pieces form can be customized by means of piece generators &mdash;
+special macros which can be separatly implemented. Each generator must
+be implemented in a separate file. A cube created by a customized
+generator is created by the `rubik_cube_generate_cube(...)` macro
+instead of `rubik_cube_create_cube(...)`.
+
+A generator implementation must contain only the body of the macro
+without `#macro ...` part (because of scene description language
+limitations). The macro is taking the following parameters (and so
+they are available in the file as predefined variables):
+- `dim` &mdash; the cube dimensions (3D vector).
+- `pos` &mdash; position of the piece to be generated (3D vector). The
+  position coordinates corresponds to the piece number in order from
+  left to right, from bottom to top and from front to back.
+- `gen_param` &mdash; a parameter which is passed to the generator. If
+  several parameters must be passed, they can be combined in an array.
+
+Normally, a generator returns a piece which is embedded into a cube
+with coordinates `<0, 0, 0>`, `<1, 1, 1>`.
+
+For example, a cube made of spheres of two alternating colors:
+
+![](piece-generators/sphere.png)
+
+can be created by the following
+[piece generator](piece-generators/sphere.inc):
+```
+sphere {
+  0, 0.5
+  pigment {
+    gen_param[mod(pos.x + pos.y + pos.z, 2)]
+  }
+  translate 0.5
+}
+```
+
+The file with such implemetation is then
+[passed](piece-generators/sphere.pov) to the
+`rubik_cube_generate_cube(...)` macro to create a cube:
+```
+rubik_cube_generate_cube(
+  <3, 3, 3>,              // Cube dimensions.
+  "sphere.inc",           // Piece generator.
+  array[2] {Red, White}   // Piece generator parameter.
+)
+```
