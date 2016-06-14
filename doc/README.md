@@ -240,3 +240,17 @@ rubik_cube_generate_cube(
   array[2] {Red, White}   // Piece generator parameter.
 )
 ```
+
+
+#### Predefined Piece Generators
+
+There are two piece generators provided with the library:
+- *[rubik-cube-generator-cube.inc](../rubik-cube-generator-cube.inc)*
+  [default] &mdash; generates cubes without stickers.
+
+  ![](simple-cube/simple-cube.png)
+
+- *[rubik-cube-generator-with-stickers.inc](../rubik-cube-generator-with-stickers.inc)* &mdash;
+  generates cubes with stickers.
+
+  ![](piece-generators/with-stickers.png)
