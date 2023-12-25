@@ -1,3 +1,4 @@
+package Java;
 import java.text.NumberFormat;
 import java.util.Scanner;
 
@@ -11,17 +12,16 @@ public class MortgageCalculator{
         float principal= (float)readNumber("Principal: $ ", 1000, 1000000);
         float annualInterestRate = (float)readNumber("Annual Interest Rate (%):  ", 0.1, 30);
         float periodYears = (float)readNumber("Years: ", 1, 30);
-        //double mortgage = calculateMortgage(principal, annualInterestRate, periodYears);
-        //String mortgageFormatted = NumberFormat.getCurrencyInstance(mortgage);
         System.out.println();
         System.out.println("MORTGAGE");
         System.out.println("________");
-        System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears));
+        System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears)); // today's date integration
         System.out.println();
         System.out.println("PAYMENT SCHEDULE");
         System.out.println("________________");
         for (short month = 1; month <= periodYears * monthsInAYear; month++){
-            double balance = calculateBalance(principal, annualInterestRate, periodYears, month); // why month????
+            double balance = calculateBalance(principal, annualInterestRate, periodYears, month); // why month???? >>> this will eventually attribute to the fourth parameter in calculateBalance()
+            //increment date by 30 days
             System.out.println("$ " + balance);
         }
     }
