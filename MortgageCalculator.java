@@ -1,3 +1,4 @@
+package Java;
 import java.text.NumberFormat;
 import java.util.Scanner;
 
@@ -7,24 +8,31 @@ public class MortgageCalculator{
 
     public static void main (String args[])
     {
-
         float principal= (float)readNumber("Principal: $ ", 1000, 1000000);
         float annualInterestRate = (float)readNumber("Annual Interest Rate (%):  ", 0.1, 30);
         float periodYears = (float)readNumber("Years: ", 1, 30);
-        //double mortgage = calculateMortgage(principal, annualInterestRate, periodYears);
-        //String mortgageFormatted = NumberFormat.getCurrencyInstance(mortgage);
-        System.out.println();
-        System.out.println("MORTGAGE");
-        System.out.println("________");
-        System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears));
+        printMortgage(principal, annualInterestRate, periodYears); //created using refactor >>> extract method to reduce LOC in main method
+        printPaymentSchedule(periodYears, principal, annualInterestRate); //created using refactor >>> extract method to reduce LOC in main method
+    }
+
+    private static void printPaymentSchedule(float periodYears, float principal, float annualInterestRate) {
         System.out.println();
         System.out.println("PAYMENT SCHEDULE");
         System.out.println("________________");
         for (short month = 1; month <= periodYears * monthsInAYear; month++){
-            double balance = calculateBalance(principal, annualInterestRate, periodYears, month); // why month????
+            double balance = calculateBalance(principal, annualInterestRate, periodYears, month); // why month???? >>> this will eventually attribute to the fourth parameter in calculateBalance()
+            //increment date by 30 days
             System.out.println("$ " + balance);
         }
     }
+
+    private static void printMortgage(float principal, float annualInterestRate, float periodYears) {
+        System.out.println();
+        System.out.println("MORTGAGE");
+        System.out.println("________");
+        System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears)); // today's date integration
+    }
+
     public static double readNumber(String prompt, double min, double max){
         Scanner scanner = new Scanner(System.in);
         double value;
@@ -35,7 +43,6 @@ public class MortgageCalculator{
                 break;
             System.out.println("Enter a number between " + min + " and " + max);}
         return value;
-
     }
 
     //mortgage calculator

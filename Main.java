@@ -18,7 +18,7 @@ public class Main{
        int a = age_2 - 96; //primitive types
        System.out.println( age + age_2 + a);
        Date now = new Date();  //reference types
-
+//krikkkkkkk
        //reference types - changeable values even after assigning
        //System.out.println(now);
        Point point1 = new Point(1,1);
