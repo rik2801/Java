@@ -11,8 +11,8 @@ public class MortgageCalculator{
         float principal= (float)readNumber("Principal: $ ", 1000, 1000000);
         float annualInterestRate = (float)readNumber("Annual Interest Rate (%):  ", 0.1, 30);
         float periodYears = (float)readNumber("Years: ", 1, 30);
-        printMortgage(principal, annualInterestRate, periodYears); //created using refactor >>> extract method to reduce LOC in main method
-        printPaymentSchedule(periodYears, principal, annualInterestRate); //created using refactor >>> extract method to reduce LOC in main method
+        printMortgage(principal, annualInterestRate, periodYears); //created using [refactor >>> extract method] to reduce LOC in main method
+        printPaymentSchedule(periodYears, principal, annualInterestRate); //created using [refactor >>> extract method] to reduce LOC in main method
     }
 
     private static void printPaymentSchedule(float periodYears, float principal, float annualInterestRate) {
