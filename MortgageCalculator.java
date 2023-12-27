@@ -18,11 +18,9 @@ public class MortgageCalculator{
 
     private static void printPaymentSchedule(float periodYears, float principal, float annualInterestRate) {
         LocalDate currentDate = LocalDate.now();
-        System.out.println("\nPAYMENT SCHEDULE");
-        System.out.println("________________");
+        System.out.println("\n\u001B[1m\u001B[4mPAYMENT SCHEDULE:\u001B[0m"); //bold - \u001B[1m; Underlined - \u001B[4m
         System.out.println("If Paid on: " + currentDate + "\n");
-        System.out.println("Successive Payment due dates and Amount Pending:");
-        System.out.println("________________________________________________");
+        System.out.println("\u001B[1mUPCOMING PAYMENT DUE DATES AND BALANCE AMOUNT:\u001B[0m");
 
         for (short month = 1; month <= periodYears * monthsInAYear; month++){
             double balance = calculateBalance(principal, annualInterestRate, periodYears, month); // why month???? >>> this will eventually attribute to the fourth parameter in calculateBalance()
@@ -35,8 +33,7 @@ public class MortgageCalculator{
 
     private static void printMortgage(float principal, float annualInterestRate, float periodYears) {
         System.out.println();
-        System.out.println("MORTGAGE");
-        System.out.println("________");
+        System.out.println("\u001B[1m\u001B[4mMORTGAGE\u001B[0m");
         System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears) ); // today's date integration
     }
 
