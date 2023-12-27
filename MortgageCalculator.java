@@ -1,5 +1,6 @@
 package Java;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class MortgageCalculator{
@@ -16,13 +17,19 @@ public class MortgageCalculator{
     }
 
     private static void printPaymentSchedule(float periodYears, float principal, float annualInterestRate) {
-        System.out.println();
-        System.out.println("PAYMENT SCHEDULE");
+        LocalDate currentDate = LocalDate.now();
+        System.out.println("\nPAYMENT SCHEDULE");
         System.out.println("________________");
+        System.out.println("If Paid on: " + currentDate + "\n");
+        System.out.println("Successive Payment due dates and Amount Pending:");
+        System.out.println("________________________________________________");
+
         for (short month = 1; month <= periodYears * monthsInAYear; month++){
             double balance = calculateBalance(principal, annualInterestRate, periodYears, month); // why month???? >>> this will eventually attribute to the fourth parameter in calculateBalance()
             //increment date by 30 days
-            System.out.println("$ " + balance);
+            LocalDate futureDate = currentDate.plusDays(30);
+            System.out.println("Due date: " + futureDate + " " + "Balance: " + "$ " + balance );
+            currentDate = futureDate;
         }
     }
 
@@ -30,7 +37,7 @@ public class MortgageCalculator{
         System.out.println();
         System.out.println("MORTGAGE");
         System.out.println("________");
-        System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears)); // today's date integration
+        System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears) ); // today's date integration
     }
 
     public static double readNumber(String prompt, double min, double max){
@@ -49,7 +56,7 @@ public class MortgageCalculator{
     public static double calculateMortgage(
             float principal,
             float annualInterestRate,
-            float periodYears) //ask M why redundant?
+            float periodYears)
     {
         float numberOfPayments = periodYears * monthsInAYear; // numberOfPayments
         double monthlyInterestRate = annualInterestRate / (monthsInAYear * percent); // monthlyInterestRate
