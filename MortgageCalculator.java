@@ -32,9 +32,11 @@ public class MortgageCalculator{
     }
 
     private static void printMortgage(float principal, float annualInterestRate, float periodYears) {
+        float numberOfPayments = periodYears * monthsInAYear; // numberOfPayments
         System.out.println();
         System.out.println("\u001B[1m\u001B[4mMORTGAGE\u001B[0m");
         System.out.println("Your mortgage is: $ " + calculateMortgage(principal, annualInterestRate, periodYears) ); // today's date integration
+        System.out.println("No of Payments: " + (int)numberOfPayments);
     }
 
     public static double readNumber(String prompt, double min, double max){
