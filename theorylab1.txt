@@ -1,0 +1,24 @@
+Enhancements have been introduced to augment the robustness and reliability of the codebase. Specifically:
+
+1. Comprehensive exception handling mechanisms have been incorporated, addressing potential scenarios such as socket timeout and connection errors. This not only fortifies the code against unexpected issues but also ensures that meaningful error messages are displayed, facilitating better diagnosis and resolution.
+
+2. To enhance code readability and maintainability, constants have been introduced for values that recur throughout the script. This deliberate choice promotes a more systematic and scalable approach, making it easier to manage and modify these values as needed.
+
+3. Stringent memory management practices have been implemented to guarantee the closure of network sockets. By adopting a systematic approach, the code explicitly ensures the release of resources, contributing to a more efficient and resource-friendly execution.
+
+These improvements collectively elevate the overall quality and resilience of the code, aligning it with best practices in terms of error handling, code organization, and resource management.
+
+
+Sample Output:
+-------------
+
+Response from GCD server: ['Member1', 'Member2', 'Member3']
+Response from Member1: 'Hello, Client!'
+Response from Member2: 'Greetings, Client!'
+Response from Member3: 'Hi, Client!'
+
+
+To run:
+------
+
+python client.py localhost 8080
