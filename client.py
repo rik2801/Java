@@ -5,6 +5,7 @@ BUFFER_SIZE = 1024  # Constant variable for buffer size
 def connect_to_gcd(host, port):
     try:
         with socket.create_connection((host, port)) as gcd_socket:
+            gcd_socket.settimeout(1.5) #R: can we put this as a constant?
             join_message = pickle.dumps('JOIN')
             gcd_socket.sendall(join_message)
 
@@ -21,6 +22,7 @@ def connect_to_gcd(host, port):
 
 def send_hello_message(member):
     try:
+        member_socket = None
         with socket.create_connection((member['host'], member['port'])) as member_socket:
             hello_message = pickle.dumps('HELLO')
             member_socket.sendall(hello_message)
@@ -39,7 +41,7 @@ def send_hello_message(member):
 def main():
     try:
         if len(sys.argv) != 3:
-            print("Usage: python client.py <GCD_HOST> <GCD_PORT>")
+            print("Usage: python client.py <GCD_HOST> <GCD_PORT>") #R: Can we mention cs1 or cs2 here?
             sys.exit(1)
 
         gcd_host, gcd_port = sys.argv[1], int(sys.argv[2])
@@ -51,7 +53,7 @@ def main():
             sys.exit(1)
 
         # Print the response from the GCD server
-        print(f"Response from GCD server: {group_members}")
+        print(f"Response from GCD server: {group_members}") 
 
         for member in group_members:
             send_hello_message(member)
@@ -61,5 +63,4 @@ def main():
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Use the allocated port range (10701-10800) for CS1 and CS2
     main()
