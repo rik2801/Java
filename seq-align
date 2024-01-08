@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+
+##
+# @file  seq-align
+# @desc  NA
+##
+
+### Imports
+
+import sys
+import os
+import random
+import string
+import shutil
+from work_queue import *
+
+
+### Functions
+
+def usage(code=0):
+	print('Usage: {} INPUT_FILE (.fasta)'.format(os.path.basename(sys.argv[0])))
+	sys.exit(code)
+
+def addContentsToList(fpath, l):
+	f = open(fpath)
+	query = f.readline().rstrip()
+	while query:
+		ref = f.readline().rstrip()
+		score = int(f.readline().rstrip())
+		l.append((score, query, ref))
+		query = f.readline().rstrip()
+	f.close()
+
+### Main Execution ###
+
+if __name__ == '__main__':
+
+	# Parse Command Line Arguments
+	if len(sys.argv) != 2:
+		usage(1)
+
+	# Create Work Queue
+	try:
+		q = WorkQueue(port = [9000,9100], name = 'seq-align-jq', debug_log = 'debug.log')
+	except:
+		print('Instantiation of Work Queue failed!')
+		sys.exit(1)
+
+	# Print Port Information
+	print('Listening on port %d...' % q.port)
+
+	# Create Workspace
+	base_dir = os.path.abspath('.')
+	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+	workspace = f'{base_dir}/{identifier}'
+	os.mkdir(workspace)
+
+	# Grab Input File
+	infile = sys.argv[1]
+	count = len(open(infile).readlines())
+
+	# Check if Multiple Sequences
+	if count < 2:
+		print('No sequences to compare')
+		sys.exit(1)
+
+	# Find Path for Command 'sed'
+	sed_path = '/bin/sed'
+	if not os.path.exists(sed_path):
+		sed_path = '/usr/bin/sed'
+	if not os.path.exists(sed_path):
+		print('Could not find program sed. Looked in \'/bin/sed\' and \'/usr/bin/sed\'')
+		sys.exit(1);
+
+	# Compare All Sequences (But Don't Duplicate Compares)
+	for i in range(1, count - 2, 2):
+
+		# Create File Names for Worker-Side
+		in1  = f'in_{i:03d}.fasta'
+		in2  = f'in_{i+1:03d}.fasta'
+		out1 = f'out_{i:03d}.txt'
+
+		# Create Task for Worker
+		command = f'./sed -n \'{i},{i+1}p;{i+2}q\' {infile} > {in1}'
+		command += f' && ./sed -n \'{i+2},{count}p\' {infile} > {in2}'
+		command += f' && ./swaligntool {in1} {in2} | ./sed -n '
+		command += f'"s/^Query: \([0-9]\+[^\s]\)\s\+(.\+\|^Ref  : \([0-9]\+[^\s]\)\s\+(.\+\|^Score: \([0-9]\+[^\s]\)/\\1\\2\\3/p"'
+		command += f' > {out1}'
+		t = Task(command)
+
+		# Specify Command Location
+		t.specify_file('./swaligntool', 'swaligntool', WORK_QUEUE_INPUT, cache=True)
+		t.specify_file('./swalign', 'swalign', WORK_QUEUE_INPUT, cache=True)
+		t.specify_file(sed_path, 'sed', WORK_QUEUE_INPUT, cache=True)
+
+		# Specify Files
+		t.specify_file(infile, infile, WORK_QUEUE_INPUT, cache=False)
+		t.specify_file(f'{workspace}/{out1}', out1, WORK_QUEUE_OUTPUT, cache=False)
+
+		# Submit Task
+		taskid = q.submit(t)
+
+	while not q.empty():
+		t = q.wait(5)
+		if t:
+			if t.return_status != 0:
+				print(f'Task #{t.id} FAILED with return code {t.return_status}')
+
+	# Grab Scores
+	scores = []
+	for fname in os.listdir(workspace):
+		addContentsToList(workspace + '/' + fname, scores)
+
+	# Sort Scores
+	scores.sort(key=lambda score: score[0], reverse=True)
+
+	# Print Scores
+	printAmount = min(10, len(scores))
+	print('Top Ten Matches:')
+	for i in range(printAmount):
+		score = scores[i][0]
+		query = scores[i][1]
+		ref = scores[i][2]
+		print(f'{i+1}: sequence {query} matches {ref} with a score of {score}')
+
+	# Remove Output Files
+	shutil.rmtree(workspace)
+	sys.exit(0)
